@@ -20,6 +20,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HttpContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -34,6 +36,8 @@ import java.util.concurrent.FutureTask;
 
 public final class HttpClientUtils {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientUtils.class);
+
     public static Future<HttpResponse> get(String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = new URIBuilder(url).addParameters(parameters).build();
@@ -41,7 +45,7 @@ public final class HttpClientUtils {
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
             return execute(request, config, retryCount);
         } catch(Exception e) {
-            // TODO Logger
+            LOGGER.error("get request failed.", e);
             return null;
         }
     }
@@ -54,7 +58,7 @@ public final class HttpClientUtils {
             request.setEntity(new UrlEncodedFormEntity(parameters));
             return execute(request, config, retryCount);
         } catch(Exception e) {
-            // TODO Logger
+            LOGGER.error("post request failed.", e);
             return null;
         }
     }
@@ -67,7 +71,7 @@ public final class HttpClientUtils {
             request.setEntity(new StringEntity(body));
             return execute(request, config, retryCount);
         } catch(Exception e) {
-            // TODO Logger
+            LOGGER.error("post request failed.", e);
             return null;
         }
     }
@@ -80,7 +84,7 @@ public final class HttpClientUtils {
             request.setEntity(new UrlEncodedFormEntity(parameters));
             return execute(request, config, retryCount);
         } catch(Exception e) {
-            // TODO Logger
+            LOGGER.error("put request failed.", e);
             return null;
         }
     }
@@ -93,7 +97,7 @@ public final class HttpClientUtils {
             request.setEntity(new StringEntity(body));
             return execute(request, config, retryCount);
         } catch(Exception e) {
-            // TODO Logger
+            LOGGER.error("put request failed.", e);
             return null;
         }
     }
@@ -105,7 +109,7 @@ public final class HttpClientUtils {
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
             return execute(request, config, retryCount);
         } catch(Exception e) {
-            // TODO Logger
+            LOGGER.error("delete request failed.", e);
             return null;
         }
     }
