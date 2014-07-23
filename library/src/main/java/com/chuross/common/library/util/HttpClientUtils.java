@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -38,89 +39,89 @@ public final class HttpClientUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientUtils.class);
 
-    public static Future<HttpResponse> get(String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> get(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = new URIBuilder(url).addParameters(parameters).build();
             final HttpGet request = new HttpGet(uri);
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
-            return execute(request, config, retryCount);
+            return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("get request failed.", e);
             return null;
         }
     }
 
-    public static Future<HttpResponse> post(String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> post(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = URI.create(url);
             HttpPost request = new HttpPost(uri);
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
             request.setEntity(new UrlEncodedFormEntity(parameters));
-            return execute(request, config, retryCount);
+            return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("post request failed.", e);
             return null;
         }
     }
 
-    public static Future<HttpResponse> post(String url, String body, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> post(Executor executor, String url, String body, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = URI.create(url);
             HttpPost request = new HttpPost(uri);
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
             request.setEntity(new StringEntity(body));
-            return execute(request, config, retryCount);
+            return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("post request failed.", e);
             return null;
         }
     }
 
-    public static Future<HttpResponse> put(String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> put(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = URI.create(url);
             HttpPut request = new HttpPut(uri);
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
             request.setEntity(new UrlEncodedFormEntity(parameters));
-            return execute(request, config, retryCount);
+            return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("put request failed.", e);
             return null;
         }
     }
 
-    public static Future<HttpResponse> put(String url, String body, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> put(Executor executor, String url, String body, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = URI.create(url);
             HttpPut request = new HttpPut(uri);
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
             request.setEntity(new StringEntity(body));
-            return execute(request, config, retryCount);
+            return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("put request failed.", e);
             return null;
         }
     }
 
-    public static Future<HttpResponse> delete(String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> delete(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = new URIBuilder(url).addParameters(parameters).build();
             final HttpDelete request = new HttpDelete(uri);
             request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
-            return execute(request, config, retryCount);
+            return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("delete request failed.", e);
             return null;
         }
     }
 
-    private static Future<HttpResponse> execute(final HttpUriRequest request, RequestConfig config, int retryCount) {
+    private static Future<HttpResponse> execute(Executor executor, final HttpUriRequest request, RequestConfig config, int retryCount) {
         final CloseableHttpClient client = HttpClients.custom()
                 .setRetryHandler(getRetryHandler(retryCount))
                 .setDefaultRequestConfig(config)
                 .build();
         try {
-            return new FutureTask<HttpResponse>(new Callable<HttpResponse>() {
+            return FutureUtils.executeOrNull(executor, new FutureTask<HttpResponse>(new Callable<HttpResponse>() {
                 @Override
                 public HttpResponse call() throws Exception {
                     return execute(client, request);
@@ -131,7 +132,7 @@ public final class HttpClientUtils {
                     abort(request);
                     return super.cancel(mayInterruptIfRunning);
                 }
-            };
+            });
         } finally {
             close(client);
         }

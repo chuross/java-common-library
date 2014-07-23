@@ -22,7 +22,7 @@ sourceSets {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository url: targetUploadDir
+            repository url: targetMavenRepositoryDir
             pom.version = '0.0.1-SNAPSHOT'
             pom.groupId = 'com.chuross'
             pom.artifactId = 'common-library'
@@ -32,6 +32,7 @@ uploadArchives {
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'com.google.guava:guava:17.0'
     compile 'org.apache.httpcomponents:httpclient:4.3.4'
     compile 'org.jdeferred:jdeferred-core:1.2.1'
 

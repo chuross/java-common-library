@@ -41,6 +41,9 @@ public final class FutureUtils {
     }
 
     public static <V> V getOrNull(Future<V> future) {
+        if(future == null) {
+            return null;
+        }
         try {
             return future.get();
         } catch (Exception e) {
