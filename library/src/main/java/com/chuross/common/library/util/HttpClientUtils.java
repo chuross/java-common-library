@@ -3,6 +3,7 @@ package com.chuross.common.library.util;
 import com.chuross.common.library.http.HttpResponse;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
@@ -41,9 +42,9 @@ public final class HttpClientUtils {
 
     public static Future<HttpResponse> get(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
-            URI uri = new URIBuilder(url).addParameters(parameters).build();
+            URI uri = getUriWithParameter(url, parameters);
             final HttpGet request = new HttpGet(uri);
-            request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
+            setHeadersIfNotNull(request, requestHeaders);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("get request failed.", e);
@@ -55,8 +56,8 @@ public final class HttpClientUtils {
         try {
             URI uri = URI.create(url);
             HttpPost request = new HttpPost(uri);
-            request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
-            request.setEntity(new UrlEncodedFormEntity(parameters));
+            setHeadersIfNotNull(request, requestHeaders);
+            setEntityIfNotNull(request, parameters);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("post request failed.", e);
@@ -68,8 +69,8 @@ public final class HttpClientUtils {
         try {
             URI uri = URI.create(url);
             HttpPost request = new HttpPost(uri);
-            request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
-            request.setEntity(new StringEntity(body));
+            setHeadersIfNotNull(request, requestHeaders);
+            setEntityIfNotNull(request, body);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("post request failed.", e);
@@ -81,8 +82,8 @@ public final class HttpClientUtils {
         try {
             URI uri = URI.create(url);
             HttpPut request = new HttpPut(uri);
-            request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
-            request.setEntity(new UrlEncodedFormEntity(parameters));
+            setHeadersIfNotNull(request, requestHeaders);
+            setEntityIfNotNull(request, parameters);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("put request failed.", e);
@@ -94,8 +95,8 @@ public final class HttpClientUtils {
         try {
             URI uri = URI.create(url);
             HttpPut request = new HttpPut(uri);
-            request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
-            request.setEntity(new StringEntity(body));
+            setHeadersIfNotNull(request, requestHeaders);
+            setEntityIfNotNull(request, body);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("put request failed.", e);
@@ -105,14 +106,42 @@ public final class HttpClientUtils {
 
     public static Future<HttpResponse> delete(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
-            URI uri = new URIBuilder(url).addParameters(parameters).build();
+            URI uri = getUriWithParameter(url, parameters);
             final HttpDelete request = new HttpDelete(uri);
-            request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
+            setHeadersIfNotNull(request, requestHeaders);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("delete request failed.", e);
             return null;
         }
+    }
+
+    private static URI getUriWithParameter(String url, List<NameValuePair> parameters) throws Exception {
+        if(parameters == null || parameters.size() <= 0) {
+            return URI.create(url);
+        }
+        return new URIBuilder(url).addParameters(parameters).build();
+    }
+
+    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, List<NameValuePair> parameters) throws Exception {
+        if(parameters == null || parameters.size() <= 0) {
+            return;
+        }
+        request.setEntity(new UrlEncodedFormEntity(parameters));
+    }
+
+    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, String body) throws Exception {
+        if(body == null) {
+            return;
+        }
+        request.setEntity(new StringEntity(body));
+    }
+
+    private static void setHeadersIfNotNull(HttpUriRequest request, List<Header> requestHeaders) {
+        if(requestHeaders == null || requestHeaders.size() <= 0) {
+            return;
+        }
+        request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
     }
 
     private static Future<HttpResponse> execute(Executor executor, final HttpUriRequest request, RequestConfig config, int retryCount) {

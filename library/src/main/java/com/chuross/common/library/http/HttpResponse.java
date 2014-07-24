@@ -2,12 +2,16 @@ package com.chuross.common.library.http;
 
 import org.apache.http.Header;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class HttpResponse {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpResponse.class);
 
     private int status;
     private List<Header> headers;
@@ -35,7 +39,12 @@ public class HttpResponse {
     }
 
     public String getContentsAsString(String charset) {
-        return new String(contents);
+        try {
+            return new String(contents, charset);
+        } catch(Exception e) {
+            LOGGER.error("getContentsAsString error.", e);
+            return null;
+        }
     }
 
 }
