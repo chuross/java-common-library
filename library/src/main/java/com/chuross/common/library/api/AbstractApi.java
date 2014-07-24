@@ -60,7 +60,7 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
             case DELETE:
                 return delete(config, retryCount);
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Invalid method.");
         }
     }
 
