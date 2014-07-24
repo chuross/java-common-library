@@ -17,12 +17,14 @@ public class EnclosingRequestParameter {
     }
 
     public EnclosingRequestParameter(List<NameValuePair> parameters, Charset charset) {
+        InputStream inputStream = null;
         try {
-            InputStream inputStream = parameters != null ? new UrlEncodedFormEntity(parameters, charset).getContent() : null;
+            inputStream = parameters != null ? new UrlEncodedFormEntity(parameters, charset).getContent() : null;
             body = IOUtils.toString(inputStream);
-            IOUtils.closeQuietly(inputStream);
         } catch(Exception e) {
             throw new IllegalArgumentException();
+        } finally {
+            IOUtils.closeQuietly(inputStream);
         }
     }
 
