@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
+import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class HttpClientUtilsTest extends HttpRequestTestCase {
 
     private static final String RESULT = "{\"hoge\": \"fuga\"}";
     private static final String ENCODING = "UTF-8";
-    private static final String CONTENT_TYPE = "application/json";
+    private static final String CONTENT_TYPE = ContentType.APPLICATION_JSON.getMimeType();
 
     @Test
     public void getでリクエストができる() throws Exception {

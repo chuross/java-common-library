@@ -10,6 +10,7 @@ import java.util.List;
 
 public class EnclosingRequestParameter {
 
+    private List<NameValuePair> parameters;
     private String body;
 
     public EnclosingRequestParameter(List<NameValuePair> parameters){
@@ -17,6 +18,7 @@ public class EnclosingRequestParameter {
     }
 
     public EnclosingRequestParameter(List<NameValuePair> parameters, Charset charset) {
+        this.parameters = parameters;
         InputStream inputStream = null;
         try {
             inputStream = parameters != null ? new UrlEncodedFormEntity(parameters, charset).getContent() : null;
@@ -30,6 +32,10 @@ public class EnclosingRequestParameter {
 
     public EnclosingRequestParameter(String body){
         this.body = body;
+    }
+
+    public List<NameValuePair> getParameters() {
+        return parameters;
     }
 
     public String getBody() {

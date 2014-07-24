@@ -3,6 +3,7 @@ package com.chuross.common.library.util;
 import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.chuross.common.library.http.HttpResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
@@ -17,6 +18,8 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
@@ -30,6 +33,7 @@ import java.io.InterruptedIOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
@@ -58,6 +62,19 @@ public final class HttpClientUtils {
             HttpPost request = new HttpPost(uri);
             setHeadersIfExists(request, requestHeaders);
             setEntityIfNotNull(request, parameter);
+            return execute(executor, request, config, retryCount);
+        } catch(Exception e) {
+            LOGGER.error("post request failed.", e);
+            return null;
+        }
+    }
+
+    public static Future<HttpResponse> post(Executor executor, String url, EnclosingRequestParameter parameter, String uploadParameterName, byte[] data, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+        try {
+            URI uri = URI.create(url);
+            HttpPost request = new HttpPost(uri);
+            setHeadersIfExists(request, requestHeaders);
+            setEntityIfNotNull(request, parameter, uploadParameterName, data);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("post request failed.", e);
@@ -98,10 +115,25 @@ public final class HttpClientUtils {
     }
 
     private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, EnclosingRequestParameter parameter) throws Exception {
-        if(parameter == null) {
+        if(parameter == null || StringUtils.isBlank(parameter.getBody())) {
             return;
         }
         request.setEntity(new StringEntity(parameter.getBody()));
+    }
+
+    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, EnclosingRequestParameter parameter, String uploadParameterName, byte[] data) throws Exception {
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        if(!StringUtils.isBlank(uploadParameterName) && data != null && data.length > 0) {
+            builder.addBinaryBody(uploadParameterName, data);
+        }
+        List<NameValuePair> nameValuePairs = parameter != null && parameter.getParameters() != null ? parameter.getParameters() : new ArrayList<NameValuePair>();
+        if(nameValuePairs.size() > 0) {
+            for(NameValuePair nameValuePair : nameValuePairs) {
+                builder.addTextBody(nameValuePair.getName(), nameValuePair.getValue());
+            }
+        }
+        request.setEntity(builder.build());
     }
 
     private static void setHeadersIfExists(HttpUriRequest request, List<Header> requestHeaders) {

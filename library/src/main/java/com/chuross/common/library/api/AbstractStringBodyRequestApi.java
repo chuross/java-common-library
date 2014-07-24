@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
-public abstract class AbstractContentRequestApi<T extends Result<?>> extends AbstractApi<T> {
+public abstract class AbstractStringBodyRequestApi<T extends Result<?>> extends AbstractApi<T> {
 
-    protected abstract String getContentBody();
+    protected abstract String getBody();
 
     @Override
     protected void setParameters(List<NameValuePair> parameters) {
@@ -34,19 +34,19 @@ public abstract class AbstractContentRequestApi<T extends Result<?>> extends Abs
             case PUT:
                 return put(config, retryCount);
             default:
-                throw new IllegalArgumentException("Invalid method.");
+                throw new UnsupportedOperationException("Unsupported method.");
         }
     }
 
     private T post(RequestConfig config, int retryCount) {
         Executor executor = MoreExecutors.sameThreadExecutor();
-        Future<HttpResponse> future = HttpClientUtils.post(executor, getUrl(), new EnclosingRequestParameter(getContentBody()), getRequestHeaders(), config, retryCount);
+        Future<HttpResponse> future = HttpClientUtils.post(executor, getUrl(), new EnclosingRequestParameter(getBody()), getRequestHeaders(), config, retryCount);
         return convert(FutureUtils.getOrNull(future));
     }
 
     private T put(RequestConfig config, int retryCount) {
         Executor executor = MoreExecutors.sameThreadExecutor();
-        Future<HttpResponse> future = HttpClientUtils.put(executor, getUrl(), new EnclosingRequestParameter(getContentBody()), getRequestHeaders(), config, retryCount);
+        Future<HttpResponse> future = HttpClientUtils.put(executor, getUrl(), new EnclosingRequestParameter(getBody()), getRequestHeaders(), config, retryCount);
         return convert(FutureUtils.getOrNull(future));
     }
 }
