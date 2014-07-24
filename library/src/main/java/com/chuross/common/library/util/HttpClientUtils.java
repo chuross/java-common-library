@@ -1,5 +1,6 @@
 package com.chuross.common.library.util;
 
+import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.chuross.common.library.http.HttpResponse;
 
 import org.apache.http.Header;
@@ -7,7 +8,6 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -44,7 +44,7 @@ public final class HttpClientUtils {
         try {
             URI uri = getUriWithParameter(url, parameters);
             final HttpGet request = new HttpGet(uri);
-            setHeadersIfNotNull(request, requestHeaders);
+            setHeadersIfExists(request, requestHeaders);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("get request failed.", e);
@@ -52,12 +52,12 @@ public final class HttpClientUtils {
         }
     }
 
-    public static Future<HttpResponse> post(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> post(Executor executor, String url, EnclosingRequestParameter parameter, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = URI.create(url);
             HttpPost request = new HttpPost(uri);
-            setHeadersIfNotNull(request, requestHeaders);
-            setEntityIfNotNull(request, parameters);
+            setHeadersIfExists(request, requestHeaders);
+            setEntityIfNotNull(request, parameter);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("post request failed.", e);
@@ -65,38 +65,12 @@ public final class HttpClientUtils {
         }
     }
 
-    public static Future<HttpResponse> post(Executor executor, String url, String body, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = URI.create(url);
-            HttpPost request = new HttpPost(uri);
-            setHeadersIfNotNull(request, requestHeaders);
-            setEntityIfNotNull(request, body);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("post request failed.", e);
-            return null;
-        }
-    }
-
-    public static Future<HttpResponse> put(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
+    public static Future<HttpResponse> put(Executor executor, String url, EnclosingRequestParameter parameter, List<Header> requestHeaders, RequestConfig config, int retryCount) {
         try {
             URI uri = URI.create(url);
             HttpPut request = new HttpPut(uri);
-            setHeadersIfNotNull(request, requestHeaders);
-            setEntityIfNotNull(request, parameters);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("put request failed.", e);
-            return null;
-        }
-    }
-
-    public static Future<HttpResponse> put(Executor executor, String url, String body, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = URI.create(url);
-            HttpPut request = new HttpPut(uri);
-            setHeadersIfNotNull(request, requestHeaders);
-            setEntityIfNotNull(request, body);
+            setHeadersIfExists(request, requestHeaders);
+            setEntityIfNotNull(request, parameter);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("put request failed.", e);
@@ -108,7 +82,7 @@ public final class HttpClientUtils {
         try {
             URI uri = getUriWithParameter(url, parameters);
             final HttpDelete request = new HttpDelete(uri);
-            setHeadersIfNotNull(request, requestHeaders);
+            setHeadersIfExists(request, requestHeaders);
             return execute(executor, request, config, retryCount);
         } catch(Exception e) {
             LOGGER.error("delete request failed.", e);
@@ -123,21 +97,14 @@ public final class HttpClientUtils {
         return new URIBuilder(url).addParameters(parameters).build();
     }
 
-    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, List<NameValuePair> parameters) throws Exception {
-        if(parameters == null || parameters.size() <= 0) {
+    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, EnclosingRequestParameter parameter) throws Exception {
+        if(parameter == null) {
             return;
         }
-        request.setEntity(new UrlEncodedFormEntity(parameters));
+        request.setEntity(new StringEntity(parameter.getBody()));
     }
 
-    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, String body) throws Exception {
-        if(body == null) {
-            return;
-        }
-        request.setEntity(new StringEntity(body));
-    }
-
-    private static void setHeadersIfNotNull(HttpUriRequest request, List<Header> requestHeaders) {
+    private static void setHeadersIfExists(HttpUriRequest request, List<Header> requestHeaders) {
         if(requestHeaders == null || requestHeaders.size() <= 0) {
             return;
         }
@@ -200,7 +167,7 @@ public final class HttpClientUtils {
         }
     }
 
-    public static void close(Closeable closeable) {
+    private static void close(Closeable closeable) {
         if(closeable == null) {
             return;
         }
@@ -215,6 +182,14 @@ public final class HttpClientUtils {
             return;
         }
         request.abort();
+    }
+
+    public static String getParameterString(List<NameValuePair> nameValuePairs) {
+        StringBuilder builder = new StringBuilder();
+        for(NameValuePair nameValuePair : nameValuePairs) {
+            builder.append(String.format("&%s=%s", nameValuePair.getName(), nameValuePair.getValue()));
+        }
+        return builder.toString().substring(1);
     }
 
 }

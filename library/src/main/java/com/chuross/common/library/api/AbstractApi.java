@@ -1,5 +1,6 @@
 package com.chuross.common.library.api;
 
+import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.chuross.common.library.http.HttpResponse;
 import com.chuross.common.library.util.FutureUtils;
 import com.chuross.common.library.util.HttpClientUtils;
@@ -71,13 +72,13 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
 
     private T post(RequestConfig config, int retryCount) {
         Executor executor = MoreExecutors.sameThreadExecutor();
-        Future<HttpResponse> future = HttpClientUtils.post(executor, getUrl(), getParameters(), getRequestHeaders(), config, retryCount);
+        Future<HttpResponse> future = HttpClientUtils.post(executor, getUrl(), new EnclosingRequestParameter(getParameters()), getRequestHeaders(), config, retryCount);
         return convert(FutureUtils.getOrNull(future));
     }
 
     private T put(RequestConfig config, int retryCount) {
         Executor executor = MoreExecutors.sameThreadExecutor();
-        Future<HttpResponse> future = HttpClientUtils.put(executor, getUrl(), getParameters(), getRequestHeaders(), config, retryCount);
+        Future<HttpResponse> future = HttpClientUtils.put(executor, getUrl(), new EnclosingRequestParameter(getParameters()), getRequestHeaders(), config, retryCount);
         return convert(FutureUtils.getOrNull(future));
     }
 

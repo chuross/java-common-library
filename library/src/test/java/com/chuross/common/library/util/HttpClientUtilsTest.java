@@ -3,8 +3,11 @@ package com.chuross.common.library.util;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.chuross.common.library.http.HttpResponse;
-import com.chuross.common.library.test.HttpRequestTestCase;
+import com.chuross.common.library.test.http.HttpRequestTestCase;
+import com.chuross.common.library.test.http.RequestPattern;
+import com.chuross.common.library.test.http.Response;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.apache.http.Header;
@@ -34,12 +37,27 @@ public class HttpClientUtilsTest extends HttpRequestTestCase {
         Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
         addResponse(pattern, response);
 
-        HttpResponse result1 = HttpClientUtils.get(MoreExecutors.sameThreadExecutor(), getUrl("/gettest"), null, null, null, 1).get();
-        assertThat(result1.getStatus(), is(404));
+        HttpResponse result = HttpClientUtils.get(MoreExecutors.sameThreadExecutor(), getUrl("/gettest"), parameters, requestHeaders, null, 1).get();
+        assertThat(result.getStatus(), is(200));
+        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
+    }
 
-        HttpResponse result2 = HttpClientUtils.get(MoreExecutors.sameThreadExecutor(), getUrl("/gettest"), parameters, requestHeaders, null, 1).get();
-        assertThat(result2.getStatus(), is(200));
-        assertThat(result2.getContentsAsString(ENCODING), is(RESULT));
+    @Test
+    public void postでリクエストができる() throws Exception {
+        List<NameValuePair> parameters = Lists.newArrayList();
+        parameters.add(new BasicNameValuePair("hoge", "fuga"));
+        parameters.add(new BasicNameValuePair("wawa", "abibi"));
+
+        List<Header> requestHeaders = Lists.newArrayList();
+        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
+
+        RequestPattern pattern = new RequestPattern("/postTest", parameters, requestHeaders);
+        Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
+        addResponse(pattern, response);
+
+        HttpResponse result = HttpClientUtils.post(MoreExecutors.sameThreadExecutor(), getUrl("/postTest"), new EnclosingRequestParameter(parameters), requestHeaders, null, 1).get();
+        assertThat(result.getStatus(), is(200));
+        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
     }
 
 }
