@@ -49,67 +49,67 @@ public final class HttpClientUtils {
     private HttpClientUtils() {
     }
 
-    public static Future<HttpResponse> get(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = getUriWithParameter(url, parameters);
-            final HttpGet request = new HttpGet(uri);
-            setHeadersIfExists(request, requestHeaders);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("get request failed.", e);
-            return null;
-        }
+    public static Future<HttpResponse> get(final Executor executor, final String url, final List<NameValuePair> parameters, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
+        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+            @Override
+            public Future<HttpResponse> call() throws Exception {
+                URI uri = getUriWithParameter(url, parameters);
+                final HttpGet request = new HttpGet(uri);
+                setHeadersIfExists(request, requestHeaders);
+                return execute(executor, request, config, retryCount);
+            }
+        });
     }
 
-    public static Future<HttpResponse> post(Executor executor, String url, EnclosingRequestParameter parameter, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = URI.create(url);
-            HttpPost request = new HttpPost(uri);
-            setHeadersIfExists(request, requestHeaders);
-            setEntityIfNotNull(request, parameter);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("post request failed.", e);
-            return null;
-        }
+    public static Future<HttpResponse> post(final Executor executor, final String url, final EnclosingRequestParameter parameter, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
+        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+            @Override
+            public Future<HttpResponse> call() throws Exception {
+                URI uri = URI.create(url);
+                HttpPost request = new HttpPost(uri);
+                setHeadersIfExists(request, requestHeaders);
+                setEntityIfNotNull(request, parameter);
+                return execute(executor, request, config, retryCount);
+            }
+        });
     }
 
-    public static Future<HttpResponse> post(Executor executor, String url, EnclosingRequestParameter parameter, String uploadParameterName, byte[] data, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = URI.create(url);
-            HttpPost request = new HttpPost(uri);
-            setHeadersIfExists(request, requestHeaders);
-            setEntityIfNotNull(request, parameter, uploadParameterName, data);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("post request failed.", e);
-            return null;
-        }
+    public static Future<HttpResponse> post(final Executor executor, final String url, final EnclosingRequestParameter parameter, final String uploadParameterName, final byte[] data, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
+        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+            @Override
+            public Future<HttpResponse> call() throws Exception {
+                URI uri = URI.create(url);
+                HttpPost request = new HttpPost(uri);
+                setHeadersIfExists(request, requestHeaders);
+                setEntityIfNotNull(request, parameter, uploadParameterName, data);
+                return execute(executor, request, config, retryCount);
+            }
+        });
     }
 
-    public static Future<HttpResponse> put(Executor executor, String url, EnclosingRequestParameter parameter, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = URI.create(url);
-            HttpPut request = new HttpPut(uri);
-            setHeadersIfExists(request, requestHeaders);
-            setEntityIfNotNull(request, parameter);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("put request failed.", e);
-            return null;
-        }
+    public static Future<HttpResponse> put(final Executor executor, final String url, final EnclosingRequestParameter parameter, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
+        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+            @Override
+            public Future<HttpResponse> call() throws Exception {
+                URI uri = URI.create(url);
+                HttpPut request = new HttpPut(uri);
+                setHeadersIfExists(request, requestHeaders);
+                setEntityIfNotNull(request, parameter);
+                return execute(executor, request, config, retryCount);
+            }
+        });
     }
 
-    public static Future<HttpResponse> delete(Executor executor, String url, List<NameValuePair> parameters, List<Header> requestHeaders, RequestConfig config, int retryCount) {
-        try {
-            URI uri = getUriWithParameter(url, parameters);
-            final HttpDelete request = new HttpDelete(uri);
-            setHeadersIfExists(request, requestHeaders);
-            return execute(executor, request, config, retryCount);
-        } catch(Exception e) {
-            LOGGER.error("delete request failed.", e);
-            return null;
-        }
+    public static Future<HttpResponse> delete(final Executor executor, final String url, final List<NameValuePair> parameters, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
+        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+            @Override
+            public Future<HttpResponse> call() throws Exception {
+                URI uri = getUriWithParameter(url, parameters);
+                final HttpDelete request = new HttpDelete(uri);
+                setHeadersIfExists(request, requestHeaders);
+                return execute(executor, request, config, retryCount);
+            }
+        });
     }
 
     private static URI getUriWithParameter(String url, List<NameValuePair> parameters) throws Exception {
@@ -132,7 +132,7 @@ public final class HttpClientUtils {
         if(!StringUtils.isBlank(uploadParameterName) && data != null && data.length > 0) {
             builder.addBinaryBody(uploadParameterName, data);
         }
-        List<NameValuePair> nameValuePairs = parameter != null && !StringUtils.isBlank(parameter.getBody()) ? URLEncodedUtils.parse(parameter.getBody(), Charset.forName("UTF-8")) : new ArrayList<NameValuePair>();
+        List<NameValuePair> nameValuePairs = parameter != null && !StringUtils.isBlank(parameter.getBody()) ? URLEncodedUtils.parse(parameter.getBody(), Charset.defaultCharset()) : new ArrayList<NameValuePair>();
         if(nameValuePairs.size() > 0) {
             for(NameValuePair nameValuePair : nameValuePairs) {
                 builder.addTextBody(nameValuePair.getName(), nameValuePair.getValue());
