@@ -26,8 +26,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HttpContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -37,14 +35,9 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 public final class HttpClientUtils {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientUtils.class);
 
     private HttpClientUtils() {
     }
@@ -164,6 +157,16 @@ public final class HttpClientUtils {
                 public boolean cancel(final boolean mayInterruptIfRunning) {
                     abort(request);
                     return super.cancel(mayInterruptIfRunning);
+                }
+
+                @Override
+                public HttpResponse get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+                    try {
+                        return super.get(timeout, unit);
+                    } catch(InterruptedException e) {
+                        abort(request);
+                        throw e;
+                    }
                 }
             });
         } finally {

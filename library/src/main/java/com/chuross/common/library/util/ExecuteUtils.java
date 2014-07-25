@@ -12,9 +12,9 @@ public final class ExecuteUtils {
     private ExecuteUtils() {
     }
 
-    public static void runQuietly(Runnable runnable) {
+    public static void executeQuietly(Executable executable) {
         try {
-            runnable.run();
+            executable.execute();
         } catch(Throwable tr) {
             LOGGER.error("callQuietly error.", tr);
         }

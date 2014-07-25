@@ -11,9 +11,9 @@ public final class FutureUtils {
     }
 
     public static void executeOrNull(final Executor executor, final Runnable runnable) {
-        ExecuteUtils.runQuietly(new Runnable() {
+        ExecuteUtils.executeQuietly(new Executable() {
             @Override
-            public void run() {
+            public void execute() throws Exception {
                 executor.execute(runnable);
             }
         });

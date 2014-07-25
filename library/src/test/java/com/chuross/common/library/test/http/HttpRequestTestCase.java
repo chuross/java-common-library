@@ -1,6 +1,6 @@
 package com.chuross.common.library.test.http;
 
-import com.chuross.common.library.util.WrappedIOUtils;
+import com.chuross.common.library.util.IOUtils;
 import com.google.common.collect.Lists;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
@@ -45,7 +45,7 @@ public class HttpRequestTestCase {
     private void onHandle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String method = request.getMethod();
         InputStream inputStream = request.getInputStream();
-        RequestPattern pattern =  method.equals("POST") || method.equals("PUT") ? new RequestPattern(target, WrappedIOUtils.toString(inputStream, Charset.defaultCharset()), getRequestHeader(request)) : new RequestPattern(target, getParameters(request), getRequestHeader(request));
+        RequestPattern pattern =  method.equals("POST") || method.equals("PUT") ? new RequestPattern(target, IOUtils.toString(inputStream, Charset.defaultCharset()), getRequestHeader(request)) : new RequestPattern(target, getParameters(request), getRequestHeader(request));
         org.apache.commons.io.IOUtils.closeQuietly(inputStream);
         if(!responseMap.containsKey(pattern)) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

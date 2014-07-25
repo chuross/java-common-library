@@ -1,6 +1,5 @@
 package com.chuross.common.library.util;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,18 +12,18 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class WrappedIOUtils {
+public class IOUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WrappedIOUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
 
-    private WrappedIOUtils() {
+    private IOUtils() {
     }
 
     public static InputStream toBufferedInputStream(final InputStream input) {
         return ExecuteUtils.callOrNull(new Callable<InputStream>() {
             @Override
             public InputStream call() throws Exception {
-                return IOUtils.toBufferedInputStream(input);
+                return org.apache.commons.io.IOUtils.toBufferedInputStream(input);
             }
         });
     }
@@ -33,7 +32,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(input);
+                return org.apache.commons.io.IOUtils.toByteArray(input);
             }
         });
     }
@@ -42,7 +41,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(input, size);
+                return org.apache.commons.io.IOUtils.toByteArray(input, size);
             }
         });
     }
@@ -51,7 +50,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(input, size);
+                return org.apache.commons.io.IOUtils.toByteArray(input, size);
             }
         });
     }
@@ -60,7 +59,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(input);
+                return org.apache.commons.io.IOUtils.toByteArray(input);
             }
         });
     }
@@ -69,7 +68,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(input, encoding);
+                return org.apache.commons.io.IOUtils.toByteArray(input, encoding);
             }
         });
     }
@@ -78,7 +77,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(uri);
+                return org.apache.commons.io.IOUtils.toByteArray(uri);
             }
         });
     }
@@ -87,7 +86,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(url);
+                return org.apache.commons.io.IOUtils.toByteArray(url);
             }
         });
     }
@@ -96,7 +95,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
-                return IOUtils.toByteArray(urlConn);
+                return org.apache.commons.io.IOUtils.toByteArray(urlConn);
             }
         });
     }
@@ -114,7 +113,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<char[]>() {
             @Override
             public char[] call() throws Exception {
-                return IOUtils.toCharArray(is, encoding);
+                return org.apache.commons.io.IOUtils.toCharArray(is, encoding);
             }
         });
     }
@@ -123,7 +122,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<char[]>() {
             @Override
             public char[] call() throws Exception {
-                return IOUtils.toCharArray(input);
+                return org.apache.commons.io.IOUtils.toCharArray(input);
             }
         });
     }
@@ -132,7 +131,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(input, encoding);
+                return org.apache.commons.io.IOUtils.toString(input, encoding);
             }
         });
     }
@@ -141,7 +140,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(input);
+                return org.apache.commons.io.IOUtils.toString(input);
             }
         });
     }
@@ -150,7 +149,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(uri);
+                return org.apache.commons.io.IOUtils.toString(uri);
             }
         });
     }
@@ -159,7 +158,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(uri, encoding);
+                return org.apache.commons.io.IOUtils.toString(uri, encoding);
             }
         });
     }
@@ -168,7 +167,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(url);
+                return org.apache.commons.io.IOUtils.toString(url);
             }
         });
     }
@@ -177,7 +176,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(url, encoding);
+                return org.apache.commons.io.IOUtils.toString(url, encoding);
             }
         });
     }
@@ -186,7 +185,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return IOUtils.toString(input, encoding);
+                return org.apache.commons.io.IOUtils.toString(input, encoding);
             }
         });
     }
@@ -195,7 +194,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
-                return IOUtils.readLines(input);
+                return org.apache.commons.io.IOUtils.readLines(input);
             }
         });
     }
@@ -204,7 +203,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
-                return IOUtils.readLines(input, encoding);
+                return org.apache.commons.io.IOUtils.readLines(input, encoding);
             }
         });
     }
@@ -213,7 +212,7 @@ public class WrappedIOUtils {
         return ExecuteUtils.callOrNull(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
-                return IOUtils.readLines(input);
+                return org.apache.commons.io.IOUtils.readLines(input);
             }
         });
     }
