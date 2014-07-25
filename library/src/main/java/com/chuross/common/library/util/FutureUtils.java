@@ -7,48 +7,54 @@ import java.util.concurrent.FutureTask;
 
 public final class FutureUtils {
 
-    public static <V> Future<V> executeOrNull(Executor executor, Callable<V> callable) {
-        try {
-            return execute(executor, callable);
-        } catch(Exception e) {
-            return null;
-        }
+    private FutureUtils() {
+    }
+
+    public static void executeOrNull(final Executor executor, final Runnable runnable) {
+        ExecuteUtils.runQuietly(new Runnable() {
+            @Override
+            public void run() {
+                executor.execute(runnable);
+            }
+        });
+    }
+
+    public static <V> Future<V> executeOrNull(final Executor executor, final Callable<V> callable) {
+        return ExecuteUtils.callOrNull(new Callable<Future<V>>() {
+            @Override
+            public Future<V> call() throws Exception {
+                return execute(executor, callable);
+            }
+        });
     }
 
     public static <V> Future<V> execute(Executor executor, Callable<V> callable) {
-        if(executor == null || callable == null) {
-            throw new IllegalArgumentException("Null value Executor or Callable");
-        }
         FutureTask<V> task = new FutureTask<V>(callable);
         executor.execute(task);
         return task;
     }
 
-    public static <V> Future<V> executeOrNull(Executor executor, FutureTask<V> task) {
-        try {
-            return execute(executor, task);
-        } catch(Exception e) {
-            return null;
-        }
+    public static <V> Future<V> executeOrNull(final Executor executor, final FutureTask<V> task) {
+        return ExecuteUtils.callOrNull(new Callable<Future<V>>() {
+            @Override
+            public Future<V> call() throws Exception {
+                return execute(executor, task);
+            }
+        });
     }
 
     public static <V> Future<V> execute(Executor executor, FutureTask<V> task) {
-        if(executor == null || task == null) {
-            throw new IllegalArgumentException("Null value Executor or FutureTask");
-        }
         executor.execute(task);
         return task;
     }
 
-    public static <V> V getOrNull(Future<V> future) {
-        if(future == null) {
-            return null;
-        }
-        try {
-            return future.get();
-        } catch (Exception e) {
-            return null;
-        }
+    public static <V> V getOrNull(final Future<V> future) {
+        return ExecuteUtils.callOrNull(new Callable<V>() {
+            @Override
+            public V call() throws Exception {
+                return future.get();
+            }
+        });
     }
 
 }

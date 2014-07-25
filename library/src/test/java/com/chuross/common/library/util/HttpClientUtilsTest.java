@@ -81,7 +81,7 @@ public class HttpClientUtilsTest extends HttpRequestTestCase {
     public void putでリクエストができる() throws Exception {
         List<NameValuePair> parameters = Lists.newArrayList();
         parameters.add(new BasicNameValuePair("hoge", "fuga"));
-        parameters.add(new BasicNameValuePair("wawa", "abibi"));
+        parameters.add(new BasicNameValuePair("wawa", "ababa"));
 
         List<Header> requestHeaders = Lists.newArrayList();
         requestHeaders.add(new BasicHeader("testHeader", "ababa"));

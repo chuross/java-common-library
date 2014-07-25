@@ -10,6 +10,9 @@ import java.util.concurrent.Future;
 
 public final class PromiseUtils {
 
+    private PromiseUtils() {
+    }
+
     public static <V, P> Promise<V, Throwable, P> promise(Executor executor, Callable<V> callable) {
         DeferredFutureTask<V, P> task = new DeferredFutureTask<V, P>(callable);
         FutureUtils.executeOrNull(executor, task);

@@ -1,11 +1,12 @@
 package com.chuross.common.library.test.http;
 
-import com.chuross.common.library.util.HttpClientUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,7 +52,7 @@ public class RequestPattern {
             }
         });
 
-        return HttpClientUtils.getParameterString(parameters);
+        return URLEncodedUtils.format(parameters, Charset.forName("UTF-8"));
     }
 
     private void sortRequestHeaders() {
