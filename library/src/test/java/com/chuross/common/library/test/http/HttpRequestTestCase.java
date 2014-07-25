@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public class HttpRequestTestCase {
@@ -44,7 +45,7 @@ public class HttpRequestTestCase {
     private void onHandle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String method = request.getMethod();
         InputStream inputStream = request.getInputStream();
-        RequestPattern pattern =  method.equals("POST") || method.equals("PUT") ? new RequestPattern(target, WrappedIOUtils.toString(inputStream), getRequestHeader(request)) : new RequestPattern(target, getParameters(request), getRequestHeader(request));
+        RequestPattern pattern =  method.equals("POST") || method.equals("PUT") ? new RequestPattern(target, WrappedIOUtils.toString(inputStream, Charset.defaultCharset()), getRequestHeader(request)) : new RequestPattern(target, getParameters(request), getRequestHeader(request));
         org.apache.commons.io.IOUtils.closeQuietly(inputStream);
         if(!responseMap.containsKey(pattern)) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
