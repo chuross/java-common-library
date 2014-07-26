@@ -5,9 +5,9 @@ import static org.hamcrest.CoreMatchers.*;
 
 import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.chuross.common.library.http.HttpResponse;
-import com.chuross.common.library.test.http.HttpRequestTestCase;
-import com.chuross.common.library.test.http.RequestPattern;
-import com.chuross.common.library.test.http.Response;
+import com.chuross.testcase.http.HttpRequestTestCase;
+import com.chuross.testcase.http.RequestPattern;
+import com.chuross.testcase.http.Response;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.apache.http.Header;

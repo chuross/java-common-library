@@ -6,6 +6,9 @@ version = '1.0'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'http://chuross.github.com/maven-repository'
+    }
 }
 
 sourceSets {
@@ -43,4 +46,5 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile 'org.eclipse.jetty:jetty-server:9.2.1.v20140609'
+    testCompile 'com.chuross:test-library:0.0.1-SNAPSHOT'
 }
