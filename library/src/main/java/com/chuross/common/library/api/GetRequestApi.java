@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 public abstract class GetRequestApi<T extends Result<?>> extends AbstractRequestApi<T> {
 
     @Override
-    protected Callable<HttpResponse> getHttpResponseCallable(RequestConfig config, int retryCount) {
+    protected Callable<HttpResponse> getHttpRequestCallable(RequestConfig config, int retryCount) {
         final Future<HttpResponse> future = HttpClientUtils.get(MoreExecutors.sameThreadExecutor(), getUrl(), getParameters(), getRequestHeaders(), config, retryCount);
         return new Callable<HttpResponse>() {
             @Override

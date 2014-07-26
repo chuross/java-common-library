@@ -17,9 +17,9 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
 
     protected abstract void setRequestHeaders(List<Header> requestHeaders);
 
-    protected abstract Callable<HttpResponse> getHttpResponseCallable(RequestConfig config, int retryCount);
+    protected abstract Callable<HttpResponse> getHttpRequestCallable(RequestConfig config, int retryCount);
 
-    protected abstract T convert(HttpResponse response);
+    protected abstract T convert(HttpResponse response) throws Exception;
 
     protected List<Header> getRequestHeaders() {
         List<Header> requestHeaders = new ArrayList<Header>();
@@ -32,7 +32,7 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
         return FutureUtils.executeOrNull(executor, new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return convert(getHttpResponseCallable(config, retryCount).call());
+                return convert(getHttpRequestCallable(config, retryCount).call());
             }
         });
     }

@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 public abstract class DeleteRequestApi<T extends Result<?>> extends AbstractRequestApi<T> {
 
     @Override
-    protected Callable<HttpResponse> getHttpResponseCallable(final RequestConfig config, final int retryCount) {
+    protected Callable<HttpResponse> getHttpRequestCallable(final RequestConfig config, final int retryCount) {
         final Future<HttpResponse> future = HttpClientUtils.delete(MoreExecutors.sameThreadExecutor(), getUrl(), getParameters(), getRequestHeaders(), config, retryCount);
         return new Callable<HttpResponse>() {
             @Override
