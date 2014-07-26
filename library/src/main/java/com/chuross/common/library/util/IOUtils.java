@@ -20,7 +20,7 @@ public class IOUtils {
     }
 
     public static InputStream toBufferedInputStream(final InputStream input) {
-        return ExecuteUtils.callOrNull(new Callable<InputStream>() {
+        return MethodCallUtils.callOrNull(new Callable<InputStream>() {
             @Override
             public InputStream call() throws Exception {
                 return org.apache.commons.io.IOUtils.toBufferedInputStream(input);
@@ -29,7 +29,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final InputStream input) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(input);
@@ -38,7 +38,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final InputStream input, final long size) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(input, size);
@@ -47,7 +47,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final InputStream input, final int size) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(input, size);
@@ -56,7 +56,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final Reader input) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(input);
@@ -65,7 +65,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final Reader input, final String encoding) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(input, encoding);
@@ -74,7 +74,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final URI uri) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(uri);
@@ -83,7 +83,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final URL url) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(url);
@@ -92,7 +92,7 @@ public class IOUtils {
     }
 
     public static byte[] toByteArray(final URLConnection urlConn) {
-        return ExecuteUtils.callOrNull(new Callable<byte[]>() {
+        return MethodCallUtils.callOrNull(new Callable<byte[]>() {
             @Override
             public byte[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toByteArray(urlConn);
@@ -101,7 +101,7 @@ public class IOUtils {
     }
 
     public static char[] toCharArray(final InputStream is) {
-        return ExecuteUtils.callOrNull(new Callable<char[]>() {
+        return MethodCallUtils.callOrNull(new Callable<char[]>() {
             @Override
             public char[] call() throws Exception {
                 return toCharArray(is);
@@ -110,7 +110,7 @@ public class IOUtils {
     }
 
     public static char[] toCharArray(final InputStream is, final Charset encoding) {
-        return ExecuteUtils.callOrNull(new Callable<char[]>() {
+        return MethodCallUtils.callOrNull(new Callable<char[]>() {
             @Override
             public char[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toCharArray(is, encoding);
@@ -119,7 +119,7 @@ public class IOUtils {
     }
 
     public static char[] toCharArray(final Reader input) {
-        return ExecuteUtils.callOrNull(new Callable<char[]>() {
+        return MethodCallUtils.callOrNull(new Callable<char[]>() {
             @Override
             public char[] call() throws Exception {
                 return org.apache.commons.io.IOUtils.toCharArray(input);
@@ -128,7 +128,7 @@ public class IOUtils {
     }
 
     public static String toString(final InputStream input, final Charset encoding) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(input, encoding);
@@ -137,7 +137,7 @@ public class IOUtils {
     }
 
     public static String toString(final Reader input) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(input);
@@ -146,7 +146,7 @@ public class IOUtils {
     }
 
     public static String toString(final URI uri) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(uri);
@@ -155,7 +155,7 @@ public class IOUtils {
     }
 
     public static String toString(final URI uri, final Charset encoding) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(uri, encoding);
@@ -164,7 +164,7 @@ public class IOUtils {
     }
 
     public static String toString(final URL url) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(url);
@@ -173,7 +173,7 @@ public class IOUtils {
     }
 
     public static String toString(final URL url, final Charset encoding) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(url, encoding);
@@ -182,7 +182,7 @@ public class IOUtils {
     }
 
     public static String toString(final byte[] input, final String encoding) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return org.apache.commons.io.IOUtils.toString(input, encoding);
@@ -191,7 +191,7 @@ public class IOUtils {
     }
 
     public static List<String> readLines(final InputStream input) {
-        return ExecuteUtils.callOrNull(new Callable<List<String>>() {
+        return MethodCallUtils.callOrNull(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
                 return org.apache.commons.io.IOUtils.readLines(input);
@@ -200,7 +200,7 @@ public class IOUtils {
     }
 
     public static List<String> readLines(final InputStream input, final Charset encoding) {
-        return ExecuteUtils.callOrNull(new Callable<List<String>>() {
+        return MethodCallUtils.callOrNull(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
                 return org.apache.commons.io.IOUtils.readLines(input, encoding);
@@ -209,7 +209,7 @@ public class IOUtils {
     }
 
     public static List<String> readLines(final Reader input) {
-        return ExecuteUtils.callOrNull(new Callable<List<String>>() {
+        return MethodCallUtils.callOrNull(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
                 return org.apache.commons.io.IOUtils.readLines(input);

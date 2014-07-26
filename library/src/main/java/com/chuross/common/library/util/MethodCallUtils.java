@@ -5,14 +5,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 
-public final class ExecuteUtils {
+public final class MethodCallUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodCallUtils.class);
 
-    private ExecuteUtils() {
+    private MethodCallUtils() {
     }
 
-    public static void executeQuietly(Executable executable) {
+    public static void callQuietly(Executable executable) {
         try {
             executable.execute();
         } catch(Throwable tr) {

@@ -14,7 +14,7 @@ public final class JsonUtils {
     }
 
     public static String encode(final Object source) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return JSON.encode(source);
@@ -23,7 +23,7 @@ public final class JsonUtils {
     }
 
     public static String encode(final Object source, final boolean prettyPrint) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return JSON.encode(source, prettyPrint);
@@ -32,7 +32,7 @@ public final class JsonUtils {
     }
 
     public static void encode(final Object source, final Appendable appendable) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 JSON.encode(source, appendable);
@@ -41,7 +41,7 @@ public final class JsonUtils {
     }
 
     public static void encode(final Object source, final Appendable appendable, final boolean prettyPrint) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 JSON.encode(source, appendable, prettyPrint);
@@ -50,7 +50,7 @@ public final class JsonUtils {
     }
 
     public static void encode(final Object source, final OutputStream outputStream) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 JSON.encode(source, outputStream);
@@ -59,7 +59,7 @@ public final class JsonUtils {
     }
 
     public static void encode(final Object source, final OutputStream outputStream, final boolean prettyPrint) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 JSON.encode(source, outputStream, prettyPrint);
@@ -68,7 +68,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final InputStream inputStream) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(inputStream);
@@ -77,7 +77,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final InputStream inputStream, final Class<T> clazz) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(inputStream, clazz);
@@ -86,7 +86,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final InputStream inputStream, final Type type) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(inputStream, type);
@@ -95,7 +95,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final Reader reader) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(reader);
@@ -104,7 +104,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final Reader reader, final Class<T> clazz) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(reader, clazz);
@@ -113,7 +113,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final Reader reader, final Type type) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(reader, type);
@@ -122,7 +122,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final String source) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(source);
@@ -131,7 +131,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final String source, final Class<T> clazz) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(source, clazz);
@@ -140,7 +140,7 @@ public final class JsonUtils {
     }
 
     public static <T> T decode(final String source, final Type type) {
-        return ExecuteUtils.callOrNull(new Callable<T>() {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return JSON.decode(source, type);
@@ -149,7 +149,7 @@ public final class JsonUtils {
     }
 
     public static String escapeScript(final Object source) {
-        return ExecuteUtils.callOrNull(new Callable<String>() {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return JSON.escapeScript(source);
@@ -158,7 +158,7 @@ public final class JsonUtils {
     }
 
     public static void escapeScript(final Object source, final Appendable appendable) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 JSON.escapeScript(source, appendable);
@@ -167,7 +167,7 @@ public final class JsonUtils {
     }
 
     public static void escapeScript(final Object source, final OutputStream outputStream) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 JSON.escapeScript(source, outputStream);

@@ -43,7 +43,7 @@ public final class HttpClientUtils {
     }
 
     public static Future<HttpResponse> get(final Executor executor, final String url, final List<NameValuePair> parameters, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
-        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
                 URI uri = getUriWithParameter(url, parameters);
@@ -55,7 +55,7 @@ public final class HttpClientUtils {
     }
 
     public static Future<HttpResponse> post(final Executor executor, final String url, final EnclosingRequestParameter parameter, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
-        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
                 URI uri = URI.create(url);
@@ -68,7 +68,7 @@ public final class HttpClientUtils {
     }
 
     public static Future<HttpResponse> post(final Executor executor, final String url, final EnclosingRequestParameter parameter, final String uploadParameterName, final byte[] data, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
-        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
                 URI uri = URI.create(url);
@@ -81,7 +81,7 @@ public final class HttpClientUtils {
     }
 
     public static Future<HttpResponse> put(final Executor executor, final String url, final EnclosingRequestParameter parameter, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
-        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
                 URI uri = URI.create(url);
@@ -94,7 +94,7 @@ public final class HttpClientUtils {
     }
 
     public static Future<HttpResponse> delete(final Executor executor, final String url, final List<NameValuePair> parameters, final List<Header> requestHeaders, final RequestConfig config, final int retryCount) {
-        return ExecuteUtils.callOrNull(new Callable<Future<HttpResponse>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
                 URI uri = getUriWithParameter(url, parameters);

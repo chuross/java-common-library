@@ -11,7 +11,7 @@ public final class FutureUtils {
     }
 
     public static void executeOrNull(final Executor executor, final Runnable runnable) {
-        ExecuteUtils.executeQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Executable() {
             @Override
             public void execute() throws Exception {
                 executor.execute(runnable);
@@ -20,7 +20,7 @@ public final class FutureUtils {
     }
 
     public static <V> Future<V> executeOrNull(final Executor executor, final Callable<V> callable) {
-        return ExecuteUtils.callOrNull(new Callable<Future<V>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<V>>() {
             @Override
             public Future<V> call() throws Exception {
                 return execute(executor, callable);
@@ -35,7 +35,7 @@ public final class FutureUtils {
     }
 
     public static <V> Future<V> executeOrNull(final Executor executor, final FutureTask<V> task) {
-        return ExecuteUtils.callOrNull(new Callable<Future<V>>() {
+        return MethodCallUtils.callOrNull(new Callable<Future<V>>() {
             @Override
             public Future<V> call() throws Exception {
                 return execute(executor, task);
@@ -49,7 +49,7 @@ public final class FutureUtils {
     }
 
     public static <V> V getOrNull(final Future<V> future) {
-        return ExecuteUtils.callOrNull(new Callable<V>() {
+        return MethodCallUtils.callOrNull(new Callable<V>() {
             @Override
             public V call() throws Exception {
                 return future.get();
