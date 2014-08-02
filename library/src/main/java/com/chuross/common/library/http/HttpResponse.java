@@ -38,6 +38,10 @@ public class HttpResponse {
         return contents;
     }
 
+    public String getContentsAsString() {
+        return getContentsAsString("UTF-8");
+    }
+
     public String getContentsAsString(String charset) {
         try {
             return new String(contents, charset);

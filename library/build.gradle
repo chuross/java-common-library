@@ -25,7 +25,7 @@ sourceSets {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository url: targetMavenRepositoryDir
+            repository url: TARGET_REPOSITORY_PATH
             pom.version = '0.0.1-SNAPSHOT'
             pom.groupId = 'com.chuross'
             pom.artifactId = 'common-library'
