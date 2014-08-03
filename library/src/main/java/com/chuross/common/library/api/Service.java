@@ -9,13 +9,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
-public abstract class LoginService<SESSION> {
+public abstract class Service<SESSION> {
 
     private OnLoginSessionChangedListener<SESSION> listener;
 
     protected abstract void onLoginSessionChanged(SESSION session);
 
-    private <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> Future<RESULT> executeWithAuthentication(Executor executor, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable, final Callable<Api<AUTH_RESULT>> authApiCallable) {
+    protected <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> Future<RESULT> executeWithAuthentication(Executor executor, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable, final Callable<Api<AUTH_RESULT>> authApiCallable) {
         return FutureUtils.executeOrNull(executor, new Callable<RESULT>() {
             @Override
             public RESULT call() throws Exception {
@@ -24,7 +24,7 @@ public abstract class LoginService<SESSION> {
         });
     }
 
-    private <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> RESULT executeWithAuthentication(RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable, Callable<Api<AUTH_RESULT>> authApiCallable) {
+    protected <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> RESULT executeWithAuthentication(RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable, Callable<Api<AUTH_RESULT>> authApiCallable) {
         Api<RESULT> api = MethodCallUtils.callOrNull(apiCallable);
         if(api == null) {
             return null;
