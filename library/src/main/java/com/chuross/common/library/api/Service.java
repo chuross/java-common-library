@@ -15,6 +15,10 @@ public abstract class Service<SESSION> {
 
     protected abstract void onLoginSessionChanged(SESSION session);
 
+    public void setOnLoginSessionChangedListener(OnLoginSessionChangedListener<SESSION> listener) {
+        this.listener = listener;
+    }
+
     protected <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> Future<RESULT> executeWithAuthentication(Executor executor, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable, final Callable<Api<AUTH_RESULT>> authApiCallable) {
         return FutureUtils.executeOrNull(executor, new Callable<RESULT>() {
             @Override
