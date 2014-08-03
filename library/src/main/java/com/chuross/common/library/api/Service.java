@@ -24,7 +24,7 @@ public abstract class Service<SESSION> {
         });
     }
 
-    protected <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> RESULT executeWithAuthentication(RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable, Callable<Api<AUTH_RESULT>> authApiCallable) {
+    private <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> RESULT executeWithAuthentication(RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable, Callable<Api<AUTH_RESULT>> authApiCallable) {
         Api<RESULT> api = MethodCallUtils.callOrNull(apiCallable);
         if(api == null) {
             return null;
