@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
-public abstract class AcoountService<SESSION> {
+public abstract class AccountService<SESSION> {
 
     private OnLoginSessionChangedListener<SESSION> listener;
 
