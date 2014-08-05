@@ -6,6 +6,7 @@ import com.chuross.common.library.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -212,6 +213,24 @@ public final class HttpClientUtils {
             return;
         }
         request.abort();
+    }
+
+    public static Header getHeaderByName(List<Header> headers, String name) {
+        for(Header header : headers) {
+            if(header.getName().equals(name)) {
+                return header;
+            }
+        }
+        return null;
+    }
+
+    public static HeaderElement getHeaderElementByName(HeaderElement[] elements, String name) {
+        for(HeaderElement element : elements) {
+            if(element.getName().equals(name)) {
+                return element;
+            }
+        }
+        return null;
     }
 
 }
