@@ -1,20 +1,28 @@
 package com.chuross.common.library.api;
 
+import org.apache.http.Header;
+
 import java.net.HttpURLConnection;
+import java.util.List;
 
 public abstract class AbstractResult<T> implements Result<T> {
 
     private int status;
-
+    private List<Header> headers;
     private T result;
 
-    public AbstractResult(int status, T result) {
+    public AbstractResult(int status, List<Header> headers, T result) {
         this.status = status;
+        this.headers = headers;
         this.result = result;
     }
 
     public int getStatus() {
         return status;
+    }
+
+    public List<Header> getHeaders() {
+        return headers;
     }
 
     public T getResult() {
