@@ -1,5 +1,6 @@
 package com.chuross.common.library.api;
 
+import com.chuross.common.library.api.result.Result;
 import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.google.common.collect.Lists;
 import org.apache.http.Header;

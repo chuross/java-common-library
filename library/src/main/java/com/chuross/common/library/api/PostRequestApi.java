@@ -1,5 +1,6 @@
 package com.chuross.common.library.api;
 
+import com.chuross.common.library.api.result.Result;
 import com.chuross.common.library.http.HttpResponse;
 import com.chuross.common.library.util.FutureUtils;
 import com.chuross.common.library.util.HttpClientUtils;

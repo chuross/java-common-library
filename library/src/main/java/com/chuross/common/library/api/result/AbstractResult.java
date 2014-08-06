@@ -1,4 +1,4 @@
-package com.chuross.common.library.api;
+package com.chuross.common.library.api.result;
 
 import org.apache.http.Header;
 

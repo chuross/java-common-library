@@ -1,5 +1,7 @@
 package com.chuross.common.library.api;
 
+import com.chuross.common.library.api.result.AuthenticatedResult;
+import com.chuross.common.library.api.result.AuthenticationResult;
 import com.chuross.common.library.util.FutureUtils;
 import com.chuross.common.library.util.MethodCallUtils;
 import com.google.common.util.concurrent.MoreExecutors;

@@ -1,5 +1,6 @@
 package com.chuross.common.library.api;
 
+import com.chuross.common.library.api.result.Result;
 import org.apache.http.client.config.RequestConfig;
 
 import java.util.concurrent.Executor;
