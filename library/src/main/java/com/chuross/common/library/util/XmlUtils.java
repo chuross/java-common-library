@@ -1,6 +1,7 @@
 package com.chuross.common.library.util;
 
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 import java.io.File;
 import java.io.InputStream;
@@ -21,11 +22,29 @@ public final class XmlUtils {
         });
     }
 
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final File file) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, file);
+            }
+        });
+    }
+
     public static <T> T read(final Class<T> clazz, final File file, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return new Persister().read(clazz, file, strict);
+            }
+        });
+    }
+
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final File file, final boolean strict) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, file, strict);
             }
         });
     }
@@ -39,11 +58,29 @@ public final class XmlUtils {
         });
     }
 
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final InputStream inputStream) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, inputStream);
+            }
+        });
+    }
+
     public static <T> T read(final Class<T> clazz, final InputStream inputStream, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return new Persister().read(clazz, inputStream, strict);
+            }
+        });
+    }
+
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final InputStream inputStream, final boolean strict) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, inputStream, strict);
             }
         });
     }
@@ -57,11 +94,29 @@ public final class XmlUtils {
         });
     }
 
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final Reader reader) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, reader);
+            }
+        });
+    }
+
     public static <T> T read(final Class<T> clazz, final Reader reader, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return new Persister().read(clazz, reader, strict);
+            }
+        });
+    }
+
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final Reader reader, final boolean strict) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, reader, strict);
             }
         });
     }
@@ -75,11 +130,29 @@ public final class XmlUtils {
         });
     }
 
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final String source) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, source);
+            }
+        });
+    }
+
     public static <T> T read(final Class<T> clazz, final String source, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return new Persister().read(clazz, source, strict);
+            }
+        });
+    }
+
+    public static <T> T read(final Strategy strategy, final Class<T> clazz, final String source, final boolean strict) {
+        return MethodCallUtils.callOrNull(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return new Persister(strategy).read(clazz, source, strict);
             }
         });
     }
