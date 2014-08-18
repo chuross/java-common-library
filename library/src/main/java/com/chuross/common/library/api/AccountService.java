@@ -11,26 +11,28 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
-public abstract class AccountService<SESSION> {
+public abstract class AccountService<SESSION, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> {
 
     private OnLoginSessionChangedListener<SESSION> listener;
 
     protected abstract void onLoginSessionChanged(SESSION session);
 
+    protected abstract Callable<Api<AUTH_RESULT>> getAuthenticationApiCallable();
+
     public void setOnLoginSessionChangedListener(OnLoginSessionChangedListener<SESSION> listener) {
         this.listener = listener;
     }
 
-    protected <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> Future<RESULT> executeWithAuthentication(Executor executor, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable, final Callable<Api<AUTH_RESULT>> authApiCallable) {
+    protected <RESULT extends AuthenticatedResult<?>> Future<RESULT> executeWithAuthentication(Executor executor, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable) {
         return FutureUtils.executeOrNull(executor, new Callable<RESULT>() {
             @Override
             public RESULT call() throws Exception {
-                return executeWithAuthentication(config, retryCount, apiCallable, authApiCallable);
+                return executeWithAuthentication(config, retryCount, apiCallable);
             }
         });
     }
 
-    private <RESULT extends AuthenticatedResult<?>, AUTH_RESULT extends AuthenticationResult<SESSION, ?>> RESULT executeWithAuthentication(RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable, Callable<Api<AUTH_RESULT>> authApiCallable) {
+    private <RESULT extends AuthenticatedResult<?>> RESULT executeWithAuthentication(RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable) {
         Api<RESULT> api = MethodCallUtils.callOrNull(apiCallable);
         if(api == null) {
             return null;
@@ -42,7 +44,7 @@ public abstract class AccountService<SESSION> {
         if(!result.isExpiredLoginSession()) {
             return result;
         }
-        Api<AUTH_RESULT> authApi = MethodCallUtils.callOrNull(authApiCallable);
+        Api<AUTH_RESULT> authApi = MethodCallUtils.callOrNull(getAuthenticationApiCallable());
         if(authApi == null) {
             return null;
         }
