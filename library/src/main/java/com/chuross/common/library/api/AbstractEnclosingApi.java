@@ -9,7 +9,7 @@ import org.apache.http.message.BasicHeader;
 
 import java.util.List;
 
-public abstract class AbstractEnclosingRequestApi<T extends Result<?>> extends AbstractApi<T> {
+public abstract class AbstractEnclosingApi<T extends Result<?>> extends AbstractApi<T> {
 
     protected abstract void setParameters(List<NameValuePair> parameters);
 

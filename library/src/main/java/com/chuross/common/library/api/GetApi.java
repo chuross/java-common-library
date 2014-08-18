@@ -10,11 +10,11 @@ import org.apache.http.client.config.RequestConfig;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public abstract class DeleteRequestApi<T extends Result<?>> extends AbstractRequestApi<T> {
+public abstract class GetApi<T extends Result<?>> extends AbstractApi<T> {
 
     @Override
-    protected Callable<HttpResponse> getHttpRequestCallable(final RequestConfig config, final int retryCount) {
-        final Future<HttpResponse> future = HttpClientUtils.delete(MoreExecutors.sameThreadExecutor(), getUrl(), getParameters(), getRequestHeaders(), config, retryCount);
+    protected Callable<HttpResponse> getHttpRequestCallable(RequestConfig config, int retryCount) {
+        final Future<HttpResponse> future = HttpClientUtils.get(MoreExecutors.sameThreadExecutor(), getUrl(), getParameters(), getRequestHeaders(), config, retryCount);
         return new Callable<HttpResponse>() {
             @Override
             public HttpResponse call() throws Exception {

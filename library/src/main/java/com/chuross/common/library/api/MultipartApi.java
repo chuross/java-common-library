@@ -10,7 +10,7 @@ import org.apache.http.client.config.RequestConfig;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public abstract class MultipartRequestApi<T extends Result<?>> extends PostRequestApi<T> {
+public abstract class MultipartApi<T extends Result<?>> extends PostApi<T> {
 
     protected abstract String getUploadParameterName();
 

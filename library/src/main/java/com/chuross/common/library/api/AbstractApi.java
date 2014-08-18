@@ -3,7 +3,9 @@ package com.chuross.common.library.api;
 import com.chuross.common.library.api.result.Result;
 import com.chuross.common.library.http.HttpResponse;
 import com.chuross.common.library.util.FutureUtils;
+import com.google.common.collect.Lists;
 import org.apache.http.Header;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
 
     protected abstract void setRequestHeaders(List<Header> requestHeaders);
 
+    protected abstract void setParameters(List<NameValuePair> parameters);
+
     protected abstract Callable<HttpResponse> getHttpRequestCallable(RequestConfig config, int retryCount);
 
     protected abstract T convert(HttpResponse response) throws Exception;
@@ -26,6 +30,12 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
         List<Header> requestHeaders = new ArrayList<Header>();
         setRequestHeaders(requestHeaders);
         return requestHeaders;
+    }
+
+    protected List<NameValuePair> getParameters() {
+        List<NameValuePair> parameters = Lists.newArrayList();
+        setParameters(parameters);
+        return parameters;
     }
 
     @Override
