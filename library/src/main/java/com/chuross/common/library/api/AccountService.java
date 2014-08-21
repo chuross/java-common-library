@@ -7,6 +7,7 @@ import com.chuross.common.library.util.MethodCallUtils;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.apache.http.client.config.RequestConfig;
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;

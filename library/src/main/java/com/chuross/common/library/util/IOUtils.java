@@ -14,8 +14,6 @@ import java.util.concurrent.Callable;
 
 public class IOUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
-
     private IOUtils() {
     }
 

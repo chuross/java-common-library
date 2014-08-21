@@ -57,4 +57,11 @@ public final class FutureUtils {
         });
     }
 
+    public static void cancel(Future<?> future, boolean mayInterruptIfRunning) {
+        if(future == null) {
+            return;
+        }
+        future.cancel(mayInterruptIfRunning);
+    }
+
 }
