@@ -22,11 +22,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final File file) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final File file) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, file);
+                return persister.read(clazz, file);
             }
         });
     }
@@ -40,11 +40,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final File file, final boolean strict) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final File file, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, file, strict);
+                return persister.read(clazz, file, strict);
             }
         });
     }
@@ -58,11 +58,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final InputStream inputStream) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final InputStream inputStream) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, inputStream);
+                return persister.read(clazz, inputStream);
             }
         });
     }
@@ -76,11 +76,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final InputStream inputStream, final boolean strict) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final InputStream inputStream, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, inputStream, strict);
+                return persister.read(clazz, inputStream, strict);
             }
         });
     }
@@ -94,11 +94,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final Reader reader) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final Reader reader) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, reader);
+                return persister.read(clazz, reader);
             }
         });
     }
@@ -112,11 +112,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final Reader reader, final boolean strict) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final Reader reader, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, reader, strict);
+                return persister.read(clazz, reader, strict);
             }
         });
     }
@@ -130,11 +130,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final String source) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final String source) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, source);
+                return persister.read(clazz, source);
             }
         });
     }
@@ -148,11 +148,11 @@ public final class XmlUtils {
         });
     }
 
-    public static <T> T read(final Strategy strategy, final Class<T> clazz, final String source, final boolean strict) {
+    public static <T> T read(final Persister persister, final Class<T> clazz, final String source, final boolean strict) {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return new Persister(strategy).read(clazz, source, strict);
+                return persister.read(clazz, source, strict);
             }
         });
     }
