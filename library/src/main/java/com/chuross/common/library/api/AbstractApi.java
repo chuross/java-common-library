@@ -4,9 +4,11 @@ import com.chuross.common.library.api.result.Result;
 import com.chuross.common.library.http.HttpResponse;
 import com.chuross.common.library.util.FutureUtils;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,13 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
                 return convert(getHttpRequestCallable(config, retryCount).call());
             }
         });
+    }
+
+    protected static void addParameterIfNotNull(List<NameValuePair> parameters, String key, Object value) {
+        if(StringUtils.isBlank(key) || value == null) {
+            return;
+        }
+        parameters.add(new BasicNameValuePair(key, value.toString()));
     }
 
 }
