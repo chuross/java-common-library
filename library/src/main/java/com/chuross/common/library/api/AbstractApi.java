@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
@@ -48,6 +49,17 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
                 return convert(getHttpRequestCallable(config, retryCount).call());
             }
         });
+    }
+
+    protected static void addRequestHeaderIfNotNull(List<Header> requestHeaders, String key, Object value) {
+        if(StringUtils.isBlank(key) || value == null) {
+            return;
+        }
+        addRequestHeader(requestHeaders, key, value);
+    }
+
+    protected static void addRequestHeader(List<Header> requestHeaders, String key, Object value) {
+        requestHeaders.add(new BasicHeader(key, value.toString()));
     }
 
     protected static void addParameterIfNotNull(List<NameValuePair> parameters, String key, Object value) {
