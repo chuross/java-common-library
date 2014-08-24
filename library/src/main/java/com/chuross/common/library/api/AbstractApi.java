@@ -54,6 +54,10 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
         if(StringUtils.isBlank(key) || value == null) {
             return;
         }
+        addParameter(parameters, key, value);
+    }
+
+    protected static void addParameter(List<NameValuePair> parameters, String key, Object value) {
         parameters.add(new BasicNameValuePair(key, value.toString()));
     }
 
