@@ -7,5 +7,4 @@ public interface ValueObject extends Serializable {
     public boolean equals(Object that);
 
     public int hashCode();
-
 }

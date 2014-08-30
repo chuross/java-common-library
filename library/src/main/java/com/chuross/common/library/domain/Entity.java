@@ -11,5 +11,4 @@ public interface Entity<I extends Identity<?>, T extends Entity<I, T>> extends C
     public int hashCode();
 
     public T clone();
-
 }

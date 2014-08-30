@@ -32,5 +32,4 @@ public abstract class AbstractEntity<I extends Identity<?>, T extends Entity<I, 
     public T clone() {
         return SerializationUtils.clone((T) this);
     }
-
 }
