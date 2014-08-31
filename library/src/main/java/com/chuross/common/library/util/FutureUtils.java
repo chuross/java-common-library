@@ -1,5 +1,7 @@
 package com.chuross.common.library.util;
 
+import com.google.common.util.concurrent.ListenableFutureTask;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
@@ -48,6 +50,20 @@ public final class FutureUtils {
         return task;
     }
 
+    public static <V> ListenableFutureTask<V> executeOrNull(final Executor executor, final ListenableFutureTask<V> task) {
+        return MethodCallUtils.callOrNull(new Callable<ListenableFutureTask<V>>() {
+            @Override
+            public ListenableFutureTask<V> call() throws Exception {
+                return execute(executor, task);
+            }
+        });
+    }
+
+    public static <V> ListenableFutureTask<V> execute(Executor executor, ListenableFutureTask<V> task) {
+        executor.execute(task);
+        return task;
+    }
+
     public static <V> V getOrNull(final Future<V> future) {
         return MethodCallUtils.callOrNull(new Callable<V>() {
             @Override
@@ -63,5 +79,4 @@ public final class FutureUtils {
         }
         future.cancel(mayInterruptIfRunning);
     }
-
 }
