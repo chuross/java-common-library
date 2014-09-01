@@ -12,9 +12,9 @@ public final class MethodCallUtils {
     private MethodCallUtils() {
     }
 
-    public static void callQuietly(Executable executable) {
+    public static void callQuietly(Runner executable) {
         try {
-            executable.execute();
+            executable.run();
         } catch(Throwable tr) {
             LOGGER.error("callQuietly error.", tr);
         }
@@ -37,5 +37,4 @@ public final class MethodCallUtils {
             return callOrNull(failCallable);
         }
     }
-
 }

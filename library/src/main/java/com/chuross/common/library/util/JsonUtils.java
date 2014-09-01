@@ -32,36 +32,36 @@ public final class JsonUtils {
     }
 
     public static void encode(final Object source, final Appendable appendable) {
-        MethodCallUtils.callQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Runner() {
             @Override
-            public void execute() throws Exception {
+            public void run() throws Exception {
                 JSON.encode(source, appendable);
             }
         });
     }
 
     public static void encode(final Object source, final Appendable appendable, final boolean prettyPrint) {
-        MethodCallUtils.callQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Runner() {
             @Override
-            public void execute() throws Exception {
+            public void run() throws Exception {
                 JSON.encode(source, appendable, prettyPrint);
             }
         });
     }
 
     public static void encode(final Object source, final OutputStream outputStream) {
-        MethodCallUtils.callQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Runner() {
             @Override
-            public void execute() throws Exception {
+            public void run() throws Exception {
                 JSON.encode(source, outputStream);
             }
         });
     }
 
     public static void encode(final Object source, final OutputStream outputStream, final boolean prettyPrint) {
-        MethodCallUtils.callQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Runner() {
             @Override
-            public void execute() throws Exception {
+            public void run() throws Exception {
                 JSON.encode(source, outputStream, prettyPrint);
             }
         });
@@ -158,21 +158,20 @@ public final class JsonUtils {
     }
 
     public static void escapeScript(final Object source, final Appendable appendable) {
-        MethodCallUtils.callQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Runner() {
             @Override
-            public void execute() throws Exception {
+            public void run() throws Exception {
                 JSON.escapeScript(source, appendable);
             }
         });
     }
 
     public static void escapeScript(final Object source, final OutputStream outputStream) {
-        MethodCallUtils.callQuietly(new Executable() {
+        MethodCallUtils.callQuietly(new Runner() {
             @Override
-            public void execute() throws Exception {
+            public void run() throws Exception {
                 JSON.escapeScript(source, outputStream);
             }
         });
     }
-
 }
