@@ -10,7 +10,7 @@ public class EnclosingRequestParameter {
 
     private String body;
 
-    public EnclosingRequestParameter(List<NameValuePair> parameters){
+    public EnclosingRequestParameter(List<NameValuePair> parameters) {
         this(parameters, Charset.forName("UTF-8"));
     }
 
@@ -18,12 +18,11 @@ public class EnclosingRequestParameter {
         body = URLEncodedUtils.format(parameters, charset);
     }
 
-    public EnclosingRequestParameter(String body){
+    public EnclosingRequestParameter(String body) {
         this.body = body;
     }
 
     public String getBody() {
         return body;
     }
-
 }
