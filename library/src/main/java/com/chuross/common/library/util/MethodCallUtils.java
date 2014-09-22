@@ -29,6 +29,15 @@ public final class MethodCallUtils {
         }
     }
 
+    public static <T> T callOrSubstitute(Callable<T> callable, T defaultValue) {
+        try {
+            return callable.call();
+        } catch(Throwable tr) {
+            LOGGER.error("call error.", tr);
+            return defaultValue;
+        }
+    }
+
     public static <T> T callOrSubstitute(Callable<T> callable, Callable<T> failCallable) {
         try {
             return callable.call();
