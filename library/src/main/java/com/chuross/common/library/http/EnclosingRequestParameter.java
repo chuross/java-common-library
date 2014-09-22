@@ -1,7 +1,7 @@
 package com.chuross.common.library.http;
 
+import com.chuross.common.library.util.HttpClientUtils;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -15,7 +15,7 @@ public class EnclosingRequestParameter {
     }
 
     public EnclosingRequestParameter(List<NameValuePair> parameters, Charset charset) {
-        body = URLEncodedUtils.format(parameters, charset);
+        body = HttpClientUtils.encode(parameters, charset.name());
     }
 
     public EnclosingRequestParameter(String body) {

@@ -2,7 +2,6 @@ package com.chuross.common.library.util;
 
 import com.chuross.common.library.http.EnclosingRequestParameter;
 import com.chuross.common.library.http.HttpResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -11,12 +10,7 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.ConnectTimeoutException;
@@ -32,6 +26,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -215,6 +210,24 @@ public final class HttpClientUtils {
         request.abort();
     }
 
+    // for android
+    public static String encode(List<NameValuePair> parameters, String charset) {
+        StringBuilder builder = new StringBuilder();
+        for(NameValuePair parameter : parameters) {
+            builder.append(encode(parameter, charset));
+        }
+        return builder.toString().substring(1);
+    }
+
+    private static String encode(final NameValuePair parameter, final String charset) {
+        return MethodCallUtils.callOrNull(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "&" + parameter.getName() + "=" + URLEncoder.encode(parameter.getValue(), charset);
+            }
+        });
+    }
+
     public static Header getHeaderByName(List<Header> headers, String name) {
         for(Header header : headers) {
             if(header.getName().equals(name)) {
@@ -232,5 +245,4 @@ public final class HttpClientUtils {
         }
         return null;
     }
-
 }
