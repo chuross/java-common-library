@@ -19,6 +19,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HttpContext;
 
@@ -137,9 +138,15 @@ public final class HttpClientUtils {
         request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
     }
 
-    private static Future<HttpResponse> execute(Executor executor, final HttpUriRequest request, RequestConfig config, int retryCount) {
+    private static Future<HttpResponse> execute(Executor executor, final HttpUriRequest request, final RequestConfig config, int retryCount) {
         final CloseableHttpClient client = HttpClients.custom()
                 .setRetryHandler(getRetryHandler(retryCount))
+                .setRedirectStrategy(new DefaultRedirectStrategy() {
+                    @Override
+                    protected boolean isRedirectable(String method) {
+                        return config != null && config.isRedirectsEnabled();
+                    }
+                })
                 .setDefaultRequestConfig(config)
                 .build();
         try {
