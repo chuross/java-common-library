@@ -27,7 +27,7 @@ public class RefrectionUtils {
         return MethodCallUtils.callOrNull(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                Field field = clazz.getDeclaredField(key);
+                final Field field = clazz.getDeclaredField(key);
                 field.setAccessible(accessible);
                 return (T) field.get(target);
             }
@@ -47,7 +47,7 @@ public class RefrectionUtils {
         MethodCallUtils.callQuietly(new Runner() {
             @Override
             public void run() throws Exception {
-                Field field = clazz.getDeclaredField(key);
+                final Field field = clazz.getDeclaredField(key);
                 field.setAccessible(accessible);
                 field.set(target, value);
             }

@@ -7,12 +7,12 @@ import org.simpleframework.xml.stream.OutputNode;
 public class IntegerBooleanConverter implements Converter<Boolean> {
 
     @Override
-    public Boolean read(InputNode node) throws Exception {
+    public Boolean read(final InputNode node) throws Exception {
         return node.getValue().equals("1");
     }
 
     @Override
-    public void write(OutputNode node, Boolean value) throws Exception {
+    public void write(final OutputNode node, final Boolean value) throws Exception {
         node.setValue(value ? "1" : "0");
     }
 

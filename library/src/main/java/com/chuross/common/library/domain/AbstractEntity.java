@@ -8,7 +8,7 @@ public abstract class AbstractEntity<I extends Identity<?>, T extends Entity<I, 
 
     private I identity;
 
-    public AbstractEntity(I identity) {
+    public AbstractEntity(final I identity) {
         this.identity = identity;
     }
 
@@ -23,7 +23,7 @@ public abstract class AbstractEntity<I extends Identity<?>, T extends Entity<I, 
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 

@@ -4,7 +4,7 @@ public abstract class AbstractIdentity<T> extends AbstractValueObject implements
 
     private T value;
 
-    public AbstractIdentity(T value) {
+    public AbstractIdentity(final T value) {
         this.value = value;
     }
 

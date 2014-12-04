@@ -14,13 +14,13 @@ public abstract class AbstractEnclosingApi<T extends Result<?>> extends Abstract
     protected abstract void setParameters(List<NameValuePair> parameters);
 
     protected EnclosingRequestParameter getParameter() {
-        List<NameValuePair> parameters = Lists.newArrayList();
+        final List<NameValuePair> parameters = Lists.newArrayList();
         setParameters(parameters);
         return new EnclosingRequestParameter(parameters);
     }
 
     @Override
-    protected void setRequestHeaders(List<Header> requestHeaders) {
+    protected void setRequestHeaders(final List<Header> requestHeaders) {
         requestHeaders.add(new BasicHeader("Content-Type", "application/x-www-form-urlencoded"));
     }
 }

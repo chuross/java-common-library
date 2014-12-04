@@ -30,19 +30,19 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
     protected abstract T convert(HttpResponse response) throws Exception;
 
     protected List<Header> getRequestHeaders() {
-        List<Header> requestHeaders = new ArrayList<Header>();
+        final List<Header> requestHeaders = new ArrayList<Header>();
         setRequestHeaders(requestHeaders);
         return requestHeaders;
     }
 
     protected List<NameValuePair> getParameters() {
-        List<NameValuePair> parameters = Lists.newArrayList();
+        final List<NameValuePair> parameters = Lists.newArrayList();
         setParameters(parameters);
         return parameters;
     }
 
     @Override
-    public Future<T> execute(Executor executor, final RequestConfig config, final int retryCount) {
+    public Future<T> execute(final Executor executor, final RequestConfig config, final int retryCount) {
         return FutureUtils.executeOrNull(executor, new Callable<T>() {
             @Override
             public T call() throws Exception {
@@ -51,26 +51,25 @@ public abstract class AbstractApi<T extends Result<?>> implements Api<T> {
         });
     }
 
-    protected static void addRequestHeaderIfNotNull(List<Header> requestHeaders, String key, Object value) {
+    protected static void addRequestHeaderIfNotNull(final List<Header> requestHeaders, final String key, final Object value) {
         if(StringUtils.isBlank(key) || value == null) {
             return;
         }
         addRequestHeader(requestHeaders, key, value);
     }
 
-    protected static void addRequestHeader(List<Header> requestHeaders, String key, Object value) {
+    protected static void addRequestHeader(final List<Header> requestHeaders, final String key, final Object value) {
         requestHeaders.add(new BasicHeader(key, value.toString()));
     }
 
-    protected static void addParameterIfNotNull(List<NameValuePair> parameters, String key, Object value) {
+    protected static void addParameterIfNotNull(final List<NameValuePair> parameters, final String key, final Object value) {
         if(StringUtils.isBlank(key) || value == null) {
             return;
         }
         addParameter(parameters, key, value);
     }
 
-    protected static void addParameter(List<NameValuePair> parameters, String key, Object value) {
+    protected static void addParameter(final List<NameValuePair> parameters, final String key, final Object value) {
         parameters.add(new BasicNameValuePair(key, value.toString()));
     }
-
 }

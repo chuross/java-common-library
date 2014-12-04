@@ -8,14 +8,14 @@ public final class CollectionUtils {
     private CollectionUtils() {
     }
 
-    private static <T> void addIfNotNull(List<T> list, T item) {
+    private static <T> void addIfNotNull(final List<T> list, final T item) {
         if(item == null) {
             return;
         }
         list.add(item);
     }
 
-    private static <K, T> void putIfNotNull(Map<K, T> map, K key, T item) {
+    private static <K, T> void putIfNotNull(final Map<K, T> map, final K key, final T item) {
         if(key == null || item == null) {
             return;
         }

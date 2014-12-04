@@ -30,8 +30,8 @@ public final class FutureUtils {
         });
     }
 
-    public static <V> Future<V> execute(Executor executor, Callable<V> callable) {
-        FutureTask<V> task = new FutureTask<V>(callable);
+    public static <V> Future<V> execute(final Executor executor, final Callable<V> callable) {
+        final FutureTask<V> task = new FutureTask<V>(callable);
         executor.execute(task);
         return task;
     }
@@ -45,7 +45,7 @@ public final class FutureUtils {
         });
     }
 
-    public static <V> Future<V> execute(Executor executor, FutureTask<V> task) {
+    public static <V> Future<V> execute(final Executor executor, final FutureTask<V> task) {
         executor.execute(task);
         return task;
     }
@@ -59,7 +59,7 @@ public final class FutureUtils {
         });
     }
 
-    public static <V> ListenableFutureTask<V> execute(Executor executor, ListenableFutureTask<V> task) {
+    public static <V> ListenableFutureTask<V> execute(final Executor executor, final ListenableFutureTask<V> task) {
         executor.execute(task);
         return task;
     }
@@ -73,7 +73,7 @@ public final class FutureUtils {
         });
     }
 
-    public static void cancel(Future<?> future, boolean mayInterruptIfRunning) {
+    public static void cancel(final Future<?> future, final boolean mayInterruptIfRunning) {
         if(future == null) {
             return;
         }

@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 public abstract class PutApi<T extends Result<?>> extends AbstractEnclosingApi<T> {
 
     @Override
-    protected Callable<HttpResponse> getHttpRequestCallable(RequestConfig config, int retryCount) {
+    protected Callable<HttpResponse> getHttpRequestCallable(final RequestConfig config, final int retryCount) {
         final Future<HttpResponse> future = HttpClientUtils.put(MoreExecutors.sameThreadExecutor(), getUrl(), getParameter(), getRequestHeaders(), config, retryCount);
         return new Callable<HttpResponse>() {
             @Override

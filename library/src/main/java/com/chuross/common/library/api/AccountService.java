@@ -17,11 +17,11 @@ public abstract class AccountService<ACCOUNT, SESSION, AUTH_RESULT extends Authe
 
     protected abstract Callable<Api<AUTH_RESULT>> getAuthenticationApiCallable(ACCOUNT account);
 
-    public void setOnLoginSessionChangedListener(OnLoginSessionChangedListener<ACCOUNT, SESSION> listener) {
+    public void setOnLoginSessionChangedListener(final OnLoginSessionChangedListener<ACCOUNT, SESSION> listener) {
         this.listener = listener;
     }
 
-    protected <RESULT extends AuthenticatedResult<?>> Future<RESULT> executeWithAuthentication(Executor executor, final ACCOUNT account, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable) {
+    protected <RESULT extends AuthenticatedResult<?>> Future<RESULT> executeWithAuthentication(final Executor executor, final ACCOUNT account, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable) {
         return FutureUtils.executeOrNull(executor, new Callable<RESULT>() {
             @Override
             public RESULT call() throws Exception {
@@ -30,30 +30,30 @@ public abstract class AccountService<ACCOUNT, SESSION, AUTH_RESULT extends Authe
         });
     }
 
-    private <RESULT extends AuthenticatedResult<?>> RESULT executeWithAuthentication(ACCOUNT account, RequestConfig config, int retryCount, final Callable<Api<RESULT>> apiCallable) {
-        Api<RESULT> api = MethodCallUtils.callOrNull(apiCallable);
+    private <RESULT extends AuthenticatedResult<?>> RESULT executeWithAuthentication(final ACCOUNT account, final RequestConfig config, final int retryCount, final Callable<Api<RESULT>> apiCallable) {
+        final Api<RESULT> api = MethodCallUtils.callOrNull(apiCallable);
         if(api == null) {
             return null;
         }
-        RESULT result = FutureUtils.getOrNull(api.execute(MoreExecutors.sameThreadExecutor(), config, retryCount));
+        final RESULT result = FutureUtils.getOrNull(api.execute(MoreExecutors.sameThreadExecutor(), config, retryCount));
         if(result == null) {
             return null;
         }
         if(!result.isExpiredLoginSession()) {
             return result;
         }
-        Api<AUTH_RESULT> authApi = MethodCallUtils.callOrNull(getAuthenticationApiCallable(account));
+        final Api<AUTH_RESULT> authApi = MethodCallUtils.callOrNull(getAuthenticationApiCallable(account));
         if(authApi == null) {
             return null;
         }
-        AUTH_RESULT authResult = FutureUtils.getOrNull(authApi.execute(MoreExecutors.sameThreadExecutor(), config, retryCount));
+        final AUTH_RESULT authResult = FutureUtils.getOrNull(authApi.execute(MoreExecutors.sameThreadExecutor(), config, retryCount));
         if(!authResult.isInvalidAccountInfo() && listener != null) {
             listener.onAuthenticationFailed(account);
         }
         if(!authResult.isSuccess()) {
             return result;
         }
-        SESSION newSession = authResult.getSession();
+        final SESSION newSession = authResult.getSession();
         if(listener != null) {
             listener.onSessionChanged(newSession);
         }

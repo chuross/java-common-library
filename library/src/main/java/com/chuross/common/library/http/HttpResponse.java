@@ -17,7 +17,7 @@ public class HttpResponse {
     private List<Header> headers;
     private byte[] contents;
 
-    public HttpResponse(org.apache.http.HttpResponse response) throws IllegalArgumentException, IOException {
+    public HttpResponse(final org.apache.http.HttpResponse response) throws IllegalArgumentException, IOException {
         if(response == null) {
             throw new IllegalArgumentException("Response is null.");
         }
@@ -42,10 +42,10 @@ public class HttpResponse {
         return getContentsAsString("UTF-8");
     }
 
-    public String getContentsAsString(String charset) {
+    public String getContentsAsString(final String charset) {
         try {
             return new String(contents, charset);
-        } catch(Exception e) {
+        } catch(final Exception e) {
             LOGGER.error("getContentsAsString error.", e);
             return null;
         }

@@ -13,14 +13,14 @@ public final class PromiseUtils {
     private PromiseUtils() {
     }
 
-    public static <V, P> Promise<V, Throwable, P> promise(Executor executor, Callable<V> callable) {
-        DeferredFutureTask<V, P> task = new DeferredFutureTask<V, P>(callable);
+    public static <V, P> Promise<V, Throwable, P> promise(final Executor executor, final Callable<V> callable) {
+        final DeferredFutureTask<V, P> task = new DeferredFutureTask<V, P>(callable);
         FutureUtils.executeOrNull(executor, task);
         return task.promise();
     }
 
-    public static <V, P> Promise<V, Throwable, P> promise(Executor executor, Future<V> future) {
-        DeferredFutureTask<V, P> task = new DeferredFutureTask<V, P>(new FutureCallable<V>(future));
+    public static <V, P> Promise<V, Throwable, P> promise(final Executor executor, final Future<V> future) {
+        final DeferredFutureTask<V, P> task = new DeferredFutureTask<V, P>(new FutureCallable<V>(future));
         FutureUtils.executeOrNull(executor, task);
         return task.promise();
     }

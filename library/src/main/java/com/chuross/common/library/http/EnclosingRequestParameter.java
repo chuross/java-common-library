@@ -10,15 +10,15 @@ public class EnclosingRequestParameter {
 
     private String body;
 
-    public EnclosingRequestParameter(List<NameValuePair> parameters) {
+    public EnclosingRequestParameter(final List<NameValuePair> parameters) {
         this(parameters, Charset.forName("UTF-8"));
     }
 
-    public EnclosingRequestParameter(List<NameValuePair> parameters, Charset charset) {
+    public EnclosingRequestParameter(final List<NameValuePair> parameters, final Charset charset) {
         body = HttpClientUtils.encode(parameters, charset.name());
     }
 
-    public EnclosingRequestParameter(String body) {
+    public EnclosingRequestParameter(final String body) {
         this.body = body;
     }
 

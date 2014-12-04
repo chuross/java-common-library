@@ -43,7 +43,7 @@ public final class HttpClientUtils {
         return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
-                URI uri = getUriWithParameter(url, parameters);
+                final URI uri = getUriWithParameter(url, parameters);
                 final HttpGet request = new HttpGet(uri);
                 setHeadersIfExists(request, requestHeaders);
                 return execute(executor, request, config, retryCount);
@@ -55,8 +55,8 @@ public final class HttpClientUtils {
         return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
-                URI uri = URI.create(url);
-                HttpPost request = new HttpPost(uri);
+                final URI uri = URI.create(url);
+                final HttpPost request = new HttpPost(uri);
                 setHeadersIfExists(request, requestHeaders);
                 setEntityIfNotNull(request, parameter);
                 return execute(executor, request, config, retryCount);
@@ -68,8 +68,8 @@ public final class HttpClientUtils {
         return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
-                URI uri = URI.create(url);
-                HttpPost request = new HttpPost(uri);
+                final URI uri = URI.create(url);
+                final HttpPost request = new HttpPost(uri);
                 setHeadersIfExists(request, requestHeaders);
                 setEntityIfNotNull(request, parameter, uploadParameterName, data);
                 return execute(executor, request, config, retryCount);
@@ -81,8 +81,8 @@ public final class HttpClientUtils {
         return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
-                URI uri = URI.create(url);
-                HttpPut request = new HttpPut(uri);
+                final URI uri = URI.create(url);
+                final HttpPut request = new HttpPut(uri);
                 setHeadersIfExists(request, requestHeaders);
                 setEntityIfNotNull(request, parameter);
                 return execute(executor, request, config, retryCount);
@@ -94,7 +94,7 @@ public final class HttpClientUtils {
         return MethodCallUtils.callOrNull(new Callable<Future<HttpResponse>>() {
             @Override
             public Future<HttpResponse> call() throws Exception {
-                URI uri = getUriWithParameter(url, parameters);
+                final URI uri = getUriWithParameter(url, parameters);
                 final HttpDelete request = new HttpDelete(uri);
                 setHeadersIfExists(request, requestHeaders);
                 return execute(executor, request, config, retryCount);
@@ -102,48 +102,48 @@ public final class HttpClientUtils {
         });
     }
 
-    private static URI getUriWithParameter(String url, List<NameValuePair> parameters) throws Exception {
+    private static URI getUriWithParameter(final String url, final List<NameValuePair> parameters) throws Exception {
         if(parameters == null || parameters.size() <= 0) {
             return URI.create(url);
         }
         return new URIBuilder(url).addParameters(parameters).build();
     }
 
-    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, EnclosingRequestParameter parameter) throws Exception {
+    private static void setEntityIfNotNull(final HttpEntityEnclosingRequest request, final EnclosingRequestParameter parameter) throws Exception {
         if(parameter == null || StringUtils.isBlank(parameter.getBody())) {
             return;
         }
         request.setEntity(new StringEntity(parameter.getBody()));
     }
 
-    private static void setEntityIfNotNull(HttpEntityEnclosingRequest request, EnclosingRequestParameter parameter, String uploadParameterName, byte[] data) throws Exception {
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+    private static void setEntityIfNotNull(final HttpEntityEnclosingRequest request, final EnclosingRequestParameter parameter, final String uploadParameterName, final byte[] data) throws Exception {
+        final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         if(!StringUtils.isBlank(uploadParameterName) && data != null && data.length > 0) {
             builder.addBinaryBody(uploadParameterName, data);
         }
-        List<NameValuePair> nameValuePairs = parameter != null && !StringUtils.isBlank(parameter.getBody()) ? URLEncodedUtils.parse(parameter.getBody(), Charset.defaultCharset()) : new ArrayList<NameValuePair>();
+        final List<NameValuePair> nameValuePairs = parameter != null && !StringUtils.isBlank(parameter.getBody()) ? URLEncodedUtils.parse(parameter.getBody(), Charset.defaultCharset()) : new ArrayList<NameValuePair>();
         if(nameValuePairs.size() > 0) {
-            for(NameValuePair nameValuePair : nameValuePairs) {
+            for(final NameValuePair nameValuePair : nameValuePairs) {
                 builder.addTextBody(nameValuePair.getName(), nameValuePair.getValue());
             }
         }
         request.setEntity(builder.build());
     }
 
-    private static void setHeadersIfExists(HttpUriRequest request, List<Header> requestHeaders) {
+    private static void setHeadersIfExists(final HttpUriRequest request, final List<Header> requestHeaders) {
         if(requestHeaders == null || requestHeaders.size() <= 0) {
             return;
         }
         request.setHeaders(requestHeaders.toArray(new Header[requestHeaders.size()]));
     }
 
-    private static Future<HttpResponse> execute(Executor executor, final HttpUriRequest request, final RequestConfig config, int retryCount) {
+    private static Future<HttpResponse> execute(final Executor executor, final HttpUriRequest request, final RequestConfig config, final int retryCount) {
         final CloseableHttpClient client = HttpClients.custom()
                 .setRetryHandler(getRetryHandler(retryCount))
                 .setRedirectStrategy(new DefaultRedirectStrategy() {
                     @Override
-                    protected boolean isRedirectable(String method) {
+                    protected boolean isRedirectable(final String method) {
                         return config != null && config.isRedirectsEnabled();
                     }
                 })
@@ -163,10 +163,10 @@ public final class HttpClientUtils {
                 }
 
                 @Override
-                public HttpResponse get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+                public HttpResponse get(final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
                     try {
                         return super.get(timeout, unit);
-                    } catch(InterruptedException e) {
+                    } catch(final InterruptedException e) {
                         abort(request);
                         throw e;
                     }
@@ -201,8 +201,8 @@ public final class HttpClientUtils {
         };
     }
 
-    private static HttpResponse execute(CloseableHttpClient client, HttpUriRequest request) throws Exception {
-        CloseableHttpResponse response = client.execute(request);
+    private static HttpResponse execute(final CloseableHttpClient client, final HttpUriRequest request) throws Exception {
+        final CloseableHttpResponse response = client.execute(request);
         try {
             return new HttpResponse(response);
         } finally {
@@ -210,7 +210,7 @@ public final class HttpClientUtils {
         }
     }
 
-    private static void abort(HttpUriRequest request) {
+    private static void abort(final HttpUriRequest request) {
         if(request == null) {
             return;
         }
@@ -218,9 +218,9 @@ public final class HttpClientUtils {
     }
 
     // for android
-    public static String encode(List<NameValuePair> parameters, String charset) {
-        StringBuilder builder = new StringBuilder();
-        for(NameValuePair parameter : parameters) {
+    public static String encode(final List<NameValuePair> parameters, final String charset) {
+        final StringBuilder builder = new StringBuilder();
+        for(final NameValuePair parameter : parameters) {
             builder.append(encode(parameter, charset));
         }
         return builder.toString().substring(1);
@@ -235,8 +235,8 @@ public final class HttpClientUtils {
         });
     }
 
-    public static Header getHeaderByName(List<Header> headers, String name) {
-        for(Header header : headers) {
+    public static Header getHeaderByName(final List<Header> headers, final String name) {
+        for(final Header header : headers) {
             if(header.getName().equals(name)) {
                 return header;
             }
@@ -244,8 +244,8 @@ public final class HttpClientUtils {
         return null;
     }
 
-    public static HeaderElement getHeaderElementByName(HeaderElement[] elements, String name) {
-        for(HeaderElement element : elements) {
+    public static HeaderElement getHeaderElementByName(final HeaderElement[] elements, final String name) {
+        for(final HeaderElement element : elements) {
             if(element.getName().equals(name)) {
                 return element;
             }

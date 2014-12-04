@@ -11,7 +11,7 @@ public abstract class AbstractResult<T> implements Result<T> {
     private List<Header> headers;
     private T result;
 
-    public AbstractResult(int status, List<Header> headers, T result) {
+    public AbstractResult(final int status, final List<Header> headers, final T result) {
         this.status = status;
         this.headers = headers;
         this.result = result;

@@ -12,36 +12,36 @@ public final class MethodCallUtils {
     private MethodCallUtils() {
     }
 
-    public static void callQuietly(Runner executable) {
+    public static void callQuietly(final Runner executable) {
         try {
             executable.run();
-        } catch(Throwable tr) {
+        } catch(final Throwable tr) {
             LOGGER.error("callQuietly error.", tr);
         }
     }
 
-    public static <T> T callOrNull(Callable<T> callable) {
+    public static <T> T callOrNull(final Callable<T> callable) {
         try {
             return callable.call();
-        } catch(Throwable tr) {
+        } catch(final Throwable tr) {
             LOGGER.error("call error.", tr);
             return null;
         }
     }
 
-    public static <T> T callOrSubstitute(Callable<T> callable, T defaultValue) {
+    public static <T> T callOrSubstitute(final Callable<T> callable, final T defaultValue) {
         try {
             return callable.call();
-        } catch(Throwable tr) {
+        } catch(final Throwable tr) {
             LOGGER.error("call error.", tr);
             return defaultValue;
         }
     }
 
-    public static <T> T callOrSubstitute(Callable<T> callable, Callable<T> failCallable) {
+    public static <T> T callOrSubstitute(final Callable<T> callable, final Callable<T> failCallable) {
         try {
             return callable.call();
-        } catch(Throwable tr) {
+        } catch(final Throwable tr) {
             LOGGER.error("call error.", tr);
             return callOrNull(failCallable);
         }
