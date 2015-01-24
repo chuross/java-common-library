@@ -1,7 +1,6 @@
 package com.chuross.common.library.util;
 
 import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 
 import java.io.File;
 import java.io.InputStream;
@@ -156,5 +155,4 @@ public final class XmlUtils {
             }
         });
     }
-
 }

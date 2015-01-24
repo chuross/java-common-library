@@ -1,9 +1,7 @@
 package com.chuross.common.library.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URL;
@@ -215,4 +213,12 @@ public class IOUtils {
         });
     }
 
+    public static void write(final String data, final OutputStream outputStream) {
+        MethodCallUtils.callQuietly(new Runner() {
+            @Override
+            public void run() throws Exception {
+                org.apache.commons.io.IOUtils.write(data, outputStream);
+            }
+        });
+    }
 }
