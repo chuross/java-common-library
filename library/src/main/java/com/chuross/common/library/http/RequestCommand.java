@@ -2,7 +2,7 @@ package com.chuross.common.library.http;
 
 import java.util.concurrent.RunnableFuture;
 
-public interface RequestCommand<R extends Result<?>, C> {
+public interface RequestCommand<R extends Result<?>> {
 
-    public RunnableFuture<R> execute(C config);
+    public RunnableFuture<R> execute();
 }

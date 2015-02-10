@@ -1,132 +1,88 @@
 package com.chuross.common.library.util;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-
-import com.chuross.common.library.http.EnclosingRequestParameter;
-import com.chuross.common.library.http.HttpResponse;
+import com.chuross.common.library.http.DefaultHttpClient;
+import com.chuross.common.library.http.DefaultResponse;
 import com.chuross.testcase.http.HttpRequestTestCase;
 import com.chuross.testcase.http.RequestPattern;
 import com.chuross.testcase.http.Response;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.net.MediaType;
 import com.google.common.util.concurrent.MoreExecutors;
-import org.apache.http.Header;
-import org.apache.http.NameValuePair;
-import org.apache.http.entity.ContentType;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class HttpClientUtilsTest extends HttpRequestTestCase {
 
     private static final String RESULT = "{\"hoge\": \"fuga\"}";
-    private static final String ENCODING = "UTF-8";
-    private static final String CONTENT_TYPE = ContentType.APPLICATION_JSON.getMimeType();
+    private static final MediaType CONTENT_TYPE = MediaType.JSON_UTF_8;
+    private DefaultHttpClient client;
+
+    @Before
+    public void before() {
+        client = new DefaultHttpClient();
+    }
 
     @Test
     public void getでリクエストができる() throws Exception {
-        final List<NameValuePair> parameters = Lists.newArrayList();
-        parameters.add(new BasicNameValuePair("hoge", "fuga"));
-        parameters.add(new BasicNameValuePair("wawa", "abibi"));
-
-        final List<Header> requestHeaders = Lists.newArrayList();
-        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
-
+        final ListMultimap<String, Object> parameters = ArrayListMultimap.create();
+        parameters.put("hoge", "fuga");
+        parameters.put("wawa", "abibi");
+        final ListMultimap<String, Object> requestHeaders = ArrayListMultimap.create();
+        requestHeaders.put("testHeader", "ababa");
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
-        final Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
-        addResponse(pattern, response);
-
-        final HttpResponse result = HttpClientUtils.get(MoreExecutors.sameThreadExecutor(), getUrl("/test"), parameters, requestHeaders, null, 1).get();
+        final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
+        putResponse(pattern, response);
+        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.get(getUrl("/test"), parameters, requestHeaders)));
         assertThat(result.getStatus(), is(200));
-        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
+        assertThat(new String(result.getData()), is(RESULT));
     }
 
     @Test
     public void postでリクエストができる() throws Exception {
-        final List<NameValuePair> parameters = Lists.newArrayList();
-        parameters.add(new BasicNameValuePair("hoge", "fuga"));
-        parameters.add(new BasicNameValuePair("wawa", "abibi"));
-
-        final List<Header> requestHeaders = Lists.newArrayList();
-        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
-
+        final ListMultimap<String, Object> parameters = ArrayListMultimap.create();
+        parameters.put("hoge", "fuga");
+        parameters.put("wawa", "abibi");
+        final ListMultimap<String, Object> requestHeaders = ArrayListMultimap.create();
+        requestHeaders.put("testHeader", "ababa");
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
-        final Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
-        addResponse(pattern, response);
-
-        final HttpResponse result = HttpClientUtils.post(MoreExecutors.sameThreadExecutor(), getUrl("/test"), new EnclosingRequestParameter(parameters), requestHeaders, null, 1).get();
+        final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
+        putResponse(pattern, response);
+        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.post(getUrl("/test"), parameters, requestHeaders)));
         assertThat(result.getStatus(), is(200));
-        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
-    }
-
-    @Test
-    public void postでjsonを送れる() throws Exception {
-        final String parameter = "{\"hello\": \"world\"}";
-
-        final List<Header> requestHeaders = Lists.newArrayList();
-        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
-
-        final RequestPattern pattern = new RequestPattern("/test", parameter, requestHeaders);
-        final Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
-        addResponse(pattern, response);
-
-        final HttpResponse result = HttpClientUtils.post(MoreExecutors.sameThreadExecutor(), getUrl("/test"), new EnclosingRequestParameter(parameter), requestHeaders, null, 1).get();
-        assertThat(result.getStatus(), is(200));
-        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
+        assertThat(new String(result.getData()), is(RESULT));
     }
 
     @Test
     public void putでリクエストができる() throws Exception {
-        final List<NameValuePair> parameters = Lists.newArrayList();
-        parameters.add(new BasicNameValuePair("hoge", "fuga"));
-        parameters.add(new BasicNameValuePair("wawa", "ababa"));
-
-        final List<Header> requestHeaders = Lists.newArrayList();
-        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
-
+        final ListMultimap<String, Object> parameters = ArrayListMultimap.create();
+        parameters.put("hoge", "fuga");
+        parameters.put("wawa", "abibi");
+        final ListMultimap<String, Object> requestHeaders = ArrayListMultimap.create();
+        requestHeaders.put("testHeader", "ababa");
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
-        final Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
-        addResponse(pattern, response);
-
-        final HttpResponse result = HttpClientUtils.put(MoreExecutors.sameThreadExecutor(), getUrl("/test"), new EnclosingRequestParameter(parameters), requestHeaders, null, 1).get();
+        final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
+        putResponse(pattern, response);
+        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.put(getUrl("/test"), parameters, requestHeaders)));
         assertThat(result.getStatus(), is(200));
-        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
-    }
-
-    @Test
-    public void putでjsonを送れる() throws Exception {
-        final String parameter = "{\"hello\": \"world\"}";
-
-        final List<Header> requestHeaders = Lists.newArrayList();
-        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
-
-        final RequestPattern pattern = new RequestPattern("/test", parameter, requestHeaders);
-        final Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
-        addResponse(pattern, response);
-
-        final HttpResponse result = HttpClientUtils.put(MoreExecutors.sameThreadExecutor(), getUrl("/test"), new EnclosingRequestParameter(parameter), requestHeaders, null, 1).get();
-        assertThat(result.getStatus(), is(200));
-        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
+        assertThat(new String(result.getData()), is(RESULT));
     }
 
     @Test
     public void deleteでリクエストができる() throws Exception {
-        final List<NameValuePair> parameters = Lists.newArrayList();
-        parameters.add(new BasicNameValuePair("hoge", "fuga"));
-        parameters.add(new BasicNameValuePair("wawa", "abibi"));
-
-        final List<Header> requestHeaders = Lists.newArrayList();
-        requestHeaders.add(new BasicHeader("testHeader", "ababa"));
-
+        final ListMultimap<String, Object> parameters = ArrayListMultimap.create();
+        parameters.put("hoge", "fuga");
+        parameters.put("wawa", "abibi");
+        final ListMultimap<String, Object> requestHeaders = ArrayListMultimap.create();
+        requestHeaders.put("testHeader", "ababa");
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
-        final Response response = new Response(200, RESULT, ENCODING, CONTENT_TYPE, null);
-        addResponse(pattern, response);
-
-        final HttpResponse result = HttpClientUtils.delete(MoreExecutors.sameThreadExecutor(), getUrl("/test"), parameters, requestHeaders, null, 1).get();
+        final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
+        putResponse(pattern, response);
+        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.delete(getUrl("/test"), parameters, requestHeaders)));
         assertThat(result.getStatus(), is(200));
-        assertThat(result.getContentsAsString(ENCODING), is(RESULT));
+        assertThat(new String(result.getData()), is(RESULT));
     }
-
 }

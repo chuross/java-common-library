@@ -15,40 +15,46 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
-public class DefaultHttpClient implements HttpClient<DefaultResponse, DefaultRequestConfig> {
+public class DefaultHttpClient implements HttpClient<DefaultResponse> {
+
+    private DefaultRequestConfig config;
 
     @Override
-    public RunnableFuture<DefaultResponse> get(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    public RunnableFuture<DefaultResponse> get(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
-        return execute(false, "GET", url, parameter, requestHeaders, config);
+        return execute(false, "GET", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> post(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    public RunnableFuture<DefaultResponse> post(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
-        return execute(false, "POST", url, parameter, requestHeaders, config);
+        return execute(true, "POST", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> post(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
-        return execute(false, "POST", url, requestBody, requestHeaders, config);
+    public RunnableFuture<DefaultResponse> post(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
+        return execute(true, "POST", url, requestBody, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> put(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    public RunnableFuture<DefaultResponse> put(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
-        return execute(false, "PUT", url, parameter, requestHeaders, config);
+        return execute(true, "PUT", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> put(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
-        return execute(false, "PUT", url, requestBody, requestHeaders, config);
+    public RunnableFuture<DefaultResponse> put(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
+        return execute(true, "PUT", url, requestBody, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> delete(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    public RunnableFuture<DefaultResponse> delete(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
-        return execute(false, "DELETE", url, parameter, requestHeaders, config);
+        return execute(false, "DELETE", url, parameter, requestHeaders, getConfig());
+    }
+
+    private DefaultRequestConfig getConfig() {
+        return config != null ? config : new DefaultRequestConfig();
     }
 
     private static RunnableFuture<DefaultResponse> execute(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
@@ -86,16 +92,16 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse, DefaultReq
     }
 
     private static ListMultimap<String, Object> getResponseHeaders(final HttpURLConnection connection) {
-        final ListMultimap<String, Object> multimap = ArrayListMultimap.create();
+        final ListMultimap<String, Object> multiMap = ArrayListMultimap.create();
         CollectionUtils.foreach(connection.getHeaderFields(), new Procedure<String, List<String>>() {
             @Override
             public void process(final String key, final List<String> values) {
                 for(final String value : values) {
-                    multimap.put(key, value);
+                    multiMap.put(key, value);
                 }
             }
         });
-        return multimap;
+        return multiMap;
     }
 
     private static String getTargetUrl(final boolean doInput, final String url, final String parameter) {
@@ -117,7 +123,6 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse, DefaultReq
     private static HttpURLConnection openConnectionInCallable(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) throws Exception {
         final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod(method);
-        connection.setDoInput(doInput);
         connection.setConnectTimeout(config.getConnectionTimeout());
         connection.setReadTimeout(config.getReadTimeout());
         connection.setAllowUserInteraction(config.isAllowRedirect());
@@ -138,6 +143,7 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse, DefaultReq
     }
 
     private static void setParameter(final HttpURLConnection connection, final String parameter) throws IOException {
+        connection.setDoInput(true);
         connection.setDoOutput(true);
         if(connection.getRequestProperty("Content-Type") == null) {
             connection.setRequestProperty("Content-Type", MediaType.FORM_DATA.toString());
@@ -155,5 +161,9 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse, DefaultReq
         if(connection != null) {
             connection.disconnect();
         }
+    }
+
+    public void setRequestConfig(final DefaultRequestConfig config) {
+        this.config = config;
     }
 }

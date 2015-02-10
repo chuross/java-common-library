@@ -11,9 +11,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
-public abstract class AbstractRequestCommand<R extends Result<?>, C> implements RequestCommand<R, C> {
+public abstract class AbstractRequestCommand<R extends Result<?>, C> implements RequestCommand<R> {
 
-    private HttpClient<Response, C> client;
+    private HttpClient<Response> client;
 
     public AbstractRequestCommand(final HttpClient client) {
         this.client = client;
@@ -46,8 +46,8 @@ public abstract class AbstractRequestCommand<R extends Result<?>, C> implements 
     }
 
     @Override
-    public RunnableFuture<R> execute(final C config) {
-        final Future<Response> clientFuture = executeClient(config);
+    public RunnableFuture<R> execute() {
+        final Future<Response> clientFuture = executeClient();
         return new FutureTask<R>(new Callable<R>() {
             @Override
             public R call() throws Exception {
@@ -62,42 +62,42 @@ public abstract class AbstractRequestCommand<R extends Result<?>, C> implements 
         };
     }
 
-    private Future<Response> executeClient(final C config) {
+    private Future<Response> executeClient() {
         switch(getMethod()) {
             case GET:
-                return executeGet(config);
+                return executeGet();
             case POST:
-                return !StringUtils.isBlank(getBody()) ? executePostAsBody(config) : executePost(config);
+                return !StringUtils.isBlank(getBody()) ? executePostAsBody() : executePost();
             case PUT:
-                return !StringUtils.isBlank(getBody()) ? executePutAsBody(config) : executePut(config);
+                return !StringUtils.isBlank(getBody()) ? executePutAsBody() : executePut();
             case DELETE:
-                return executeDelete(config);
+                return executeDelete();
             default:
                 throw new IllegalArgumentException("invalid method");
         }
     }
 
-    private Future<Response> executeGet(final C config) {
-        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.get(getUrl(), getParameters(), getRequestHeaders(), config));
+    private Future<Response> executeGet() {
+        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.get(getUrl(), getParameters(), getRequestHeaders()));
     }
 
-    private Future<Response> executePost(final C config) {
-        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.post(getUrl(), getParameters(), getRequestHeaders(), config));
+    private Future<Response> executePost() {
+        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.post(getUrl(), getParameters(), getRequestHeaders()));
     }
 
-    private Future<Response> executePostAsBody(final C config) {
-        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.post(getUrl(), getBody(), getRequestHeaders(), config));
+    private Future<Response> executePostAsBody() {
+        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.post(getUrl(), getBody(), getRequestHeaders()));
     }
 
-    private Future<Response> executePut(final C config) {
-        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.put(getUrl(), getParameters(), getRequestHeaders(), config));
+    private Future<Response> executePut() {
+        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.put(getUrl(), getParameters(), getRequestHeaders()));
     }
 
-    private Future<Response> executePutAsBody(final C config) {
-        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.put(getUrl(), getBody(), getRequestHeaders(), config));
+    private Future<Response> executePutAsBody() {
+        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.put(getUrl(), getBody(), getRequestHeaders()));
     }
 
-    private Future<Response> executeDelete(final C config) {
-        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.delete(getUrl(), getParameters(), getRequestHeaders(), config));
+    private Future<Response> executeDelete() {
+        return FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.delete(getUrl(), getParameters(), getRequestHeaders()));
     }
 }
