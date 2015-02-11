@@ -8,7 +8,6 @@ import com.chuross.testcase.http.Response;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.net.MediaType;
-import com.google.common.util.concurrent.MoreExecutors;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +35,7 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
         final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
         putResponse(pattern, response);
-        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.get(getUrl("/test"), parameters, requestHeaders)));
+        final DefaultResponse result = client.get(getUrl("/test"), parameters, requestHeaders).toBlocking().first();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }
@@ -51,7 +50,7 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
         final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
         putResponse(pattern, response);
-        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.post(getUrl("/test"), parameters, requestHeaders)));
+        final DefaultResponse result = client.post(getUrl("/test"), parameters, requestHeaders).toBlocking().first();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }
@@ -66,7 +65,7 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
         final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
         putResponse(pattern, response);
-        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.put(getUrl("/test"), parameters, requestHeaders)));
+        final DefaultResponse result = client.put(getUrl("/test"), parameters, requestHeaders).toBlocking().first();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }
@@ -81,7 +80,7 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
         final RequestPattern pattern = new RequestPattern("/test", parameters, requestHeaders);
         final Response response = new Response(200, RESULT, null, CONTENT_TYPE);
         putResponse(pattern, response);
-        final DefaultResponse result = FutureUtils.getOrNull(FutureUtils.execute(MoreExecutors.sameThreadExecutor(), client.delete(getUrl("/test"), parameters, requestHeaders)));
+        final DefaultResponse result = client.delete(getUrl("/test"), parameters, requestHeaders).toBlocking().first();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }

@@ -5,6 +5,10 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.net.MediaType;
 import org.apache.commons.lang3.StringUtils;
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action0;
+import rx.subscriptions.Subscriptions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,43 +16,41 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.RunnableFuture;
 
 public class DefaultHttpClient implements HttpClient<DefaultResponse> {
 
     private DefaultRequestConfig config;
 
     @Override
-    public RunnableFuture<DefaultResponse> get(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> get(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(false, "GET", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> post(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> post(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(true, "POST", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> post(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> post(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
         return execute(true, "POST", url, requestBody, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> put(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> put(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(true, "PUT", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> put(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> put(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
         return execute(true, "PUT", url, requestBody, requestHeaders, getConfig());
     }
 
     @Override
-    public RunnableFuture<DefaultResponse> delete(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> delete(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(false, "DELETE", url, parameter, requestHeaders, getConfig());
     }
@@ -57,22 +59,30 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         return config != null ? config : new DefaultRequestConfig();
     }
 
-    private static RunnableFuture<DefaultResponse> execute(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    private static Observable<DefaultResponse> execute(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
         final String targetUrl = getTargetUrl(doInput, url, parameter);
         final HttpURLConnection connection = openConnection(doInput, method, targetUrl, parameter, requestHeaders, config);
-        return new FutureTask<DefaultResponse>(new Callable<DefaultResponse>() {
+        return Observable.create(new Observable.OnSubscribe<DefaultResponse>() {
             @Override
-            public DefaultResponse call() throws Exception {
-                connect(connection);
-                return getResponse(connection);
+            public void call(final Subscriber<? super DefaultResponse> subscriber) {
+                onSubscribe(connection, subscriber);
             }
-        }) {
-            @Override
-            public boolean cancel(final boolean mayInterruptIfRunning) {
-                disconnect(connection);
-                return super.cancel(mayInterruptIfRunning);
-            }
-        };
+        });
+    }
+
+    private static void onSubscribe(final HttpURLConnection connection, final Subscriber<? super DefaultResponse> subscriber) {
+        try {
+            connect(connection);
+            subscriber.add(Subscriptions.create(new Action0() {
+                @Override
+                public void call() {
+                    disconnect(connection);
+                }
+            }));
+            subscriber.onNext(getResponse(connection));
+        } catch(final Exception e) {
+            subscriber.onError(e);
+        }
     }
 
     private static DefaultResponse getResponse(final HttpURLConnection connection) throws IOException {
