@@ -1,4 +1,4 @@
-package com.chuross.common.library.http;
+package com.chuross.common.library.rest;
 
 import com.google.common.collect.ListMultimap;
 

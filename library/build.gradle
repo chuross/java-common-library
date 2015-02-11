@@ -35,7 +35,7 @@ uploadArchives {
     repositories {
         mavenDeployer {
             repository url: TARGET_REPOSITORY_PATH
-            pom.version = '0.0.1-SNAPSHOT'
+            pom.version = '0.1.0'
             pom.groupId = 'com.chuross'
             pom.artifactId = 'common-library'
         }
