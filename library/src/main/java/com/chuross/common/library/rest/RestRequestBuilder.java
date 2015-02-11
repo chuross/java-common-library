@@ -6,12 +6,12 @@ import com.google.common.net.HttpHeaders;
 
 public class RestRequestBuilder {
 
-    private String path;
+    private String url;
     private ListMultimap<String, Object> parameters = ArrayListMultimap.create();
     private ListMultimap<String, Object> requestHeaders = ArrayListMultimap.create();
 
-    public RestRequestBuilder(final String path) {
-        this.path = path;
+    public RestRequestBuilder(final String url) {
+        this.url = url;
     }
 
     public RestRequestBuilder setUserAgent(final String value) {
@@ -33,6 +33,6 @@ public class RestRequestBuilder {
     }
 
     public RestRequest build() {
-        return new RestRequest(path, parameters, requestHeaders);
+        return new RestRequest(url, parameters, requestHeaders);
     }
 }

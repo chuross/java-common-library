@@ -51,18 +51,8 @@ public class RestClientTest extends HttpRequestTestCase {
             super(client);
         }
 
-        @Override
-        protected RestContext getContext() {
-            return new RestContext() {
-                @Override
-                public String getBaseUrl() {
-                    return BASE_URL;
-                }
-            };
-        }
-
         public Observable<Result<String>> executeTest() {
-            final RestRequest request = new RestRequestBuilder("/test").addParameter("hoge", "fuga").addParameter("wawa", "abibi").addRequestHeader("testHeader", "ababa").build();
+            final RestRequest request = new RestRequestBuilder(BASE_URL + "/test").addParameter("hoge", "fuga").addParameter("wawa", "abibi").addRequestHeader("testHeader", "ababa").build();
             return execute(Method.GET, request, new Function<DefaultResponse, Result<String>>() {
                 @Override
                 public Result<String> apply(final DefaultResponse input) {
