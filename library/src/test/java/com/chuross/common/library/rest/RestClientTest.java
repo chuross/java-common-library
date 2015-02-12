@@ -40,7 +40,7 @@ public class RestClientTest extends HttpRequestTestCase {
 
     @Test
     public void リクエストができる() throws Exception {
-        final Result<String> result = client.executeTest().toBlocking().first();
+        final Result<String> result = client.executeTest().toBlocking().single();
         assertThat(result.getStatus(), is(200));
         assertThat(result.getContent(), is("hoge"));
     }

@@ -35,28 +35,28 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
 
     @Test
     public void getでリクエストができる() throws Exception {
-        final DefaultResponse result = client.get(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().first();
+        final DefaultResponse result = client.get(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }
 
     @Test
     public void postでリクエストができる() throws Exception {
-        final DefaultResponse result = client.post(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().first();
+        final DefaultResponse result = client.post(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }
 
     @Test
     public void putでリクエストができる() throws Exception {
-        final DefaultResponse result = client.put(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().first();
+        final DefaultResponse result = client.put(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }
 
     @Test
     public void deleteでリクエストができる() throws Exception {
-        final DefaultResponse result = client.delete(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().first();
+        final DefaultResponse result = client.delete(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
         assertThat(result.getStatus(), is(200));
         assertThat(new String(result.getData()), is(RESULT));
     }

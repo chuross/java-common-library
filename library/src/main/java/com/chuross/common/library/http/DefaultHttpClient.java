@@ -80,6 +80,7 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
                 }
             }));
             subscriber.onNext(getResponse(connection));
+            subscriber.onCompleted();
         } catch(final Exception e) {
             subscriber.onError(e);
         }
