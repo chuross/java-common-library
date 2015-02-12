@@ -6,13 +6,13 @@ import com.chuross.common.library.http.HttpClient;
 import com.chuross.testcase.http.HttpRequestTestCase;
 import com.chuross.testcase.http.RequestPattern;
 import com.chuross.testcase.http.Response;
-import com.google.common.base.Function;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.net.MediaType;
 import org.junit.Before;
 import org.junit.Test;
 import rx.Observable;
+import rx.functions.Func1;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -53,18 +53,18 @@ public class RestClientTest extends HttpRequestTestCase {
 
         public Observable<Result<String>> executeTest() {
             final RestRequest request = new RestRequestBuilder(BASE_URL + "/test").addParameter("hoge", "fuga").addParameter("wawa", "abibi").addRequestHeader("testHeader", "ababa").build();
-            return execute(Method.GET, request, new Function<DefaultResponse, Result<String>>() {
+            return execute(Method.GET, request, new Func1<DefaultResponse, Result<String>>() {
                 @Override
-                public Result<String> apply(final DefaultResponse input) {
+                public Result<String> call(final DefaultResponse response) {
                     return new Result<String>() {
                         @Override
                         public int getStatus() {
-                            return input.getStatus();
+                            return response.getStatus();
                         }
 
                         @Override
                         public boolean isSuccess() {
-                            return input.getStatus() == 200;
+                            return response.getStatus() == 200;
                         }
 
                         @Override
@@ -74,7 +74,7 @@ public class RestClientTest extends HttpRequestTestCase {
 
                         @Override
                         public String getContent() {
-                            return new String(input.getData());
+                            return new String(response.getData());
                         }
                     };
                 }
