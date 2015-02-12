@@ -27,8 +27,22 @@ public class RestRequestBuilder {
         return this;
     }
 
+    public RestRequestBuilder addParameterIfNotNull(final String key, final Object value) {
+        if(value != null) {
+            addParameter(key, value);
+        }
+        return this;
+    }
+
     public RestRequestBuilder addRequestHeader(final String key, final Object value) {
         requestHeaders.put(key, value);
+        return this;
+    }
+
+    public RestRequestBuilder addRequestHeaderIfNotNull(final String key, final Object value) {
+        if(value != null) {
+            addRequestHeader(key, value);
+        }
         return this;
     }
 
