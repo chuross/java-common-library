@@ -33,6 +33,6 @@ public abstract class AbstractResult<T> implements Result<T> {
 
     @Override
     public T getContent() {
-        return null;
+        return content;
     }
 }
