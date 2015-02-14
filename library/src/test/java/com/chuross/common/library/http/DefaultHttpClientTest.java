@@ -16,19 +16,21 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
 
     private static final String RESULT = "{\"hoge\": \"fuga\"}";
     private static final ListMultimap<String, Object> PARAMETERS = ArrayListMultimap.create();
-    private static final ListMultimap<String, Object> REQUEST_HEADERS = ArrayListMultimap.create();
+    private static final ListMultimap<String, HeaderElement> REQUEST_HEADERS = ArrayListMultimap.create();
+    private static final ListMultimap<String, Object> PATTERN_REQUEST_HEADERS = ArrayListMultimap.create();
     private DefaultHttpClient client;
 
     static {
         PARAMETERS.put("hoge", "fuga");
         PARAMETERS.put("wawa", "abibi");
-        REQUEST_HEADERS.put("testHeader", "ababa");
+        REQUEST_HEADERS.put("testHeader", HeaderElement.of("ababa"));
+        PATTERN_REQUEST_HEADERS.put("testHeader", "ababa");
     }
 
     @Before
     public void before() {
         client = new DefaultHttpClient();
-        final RequestPattern pattern = new RequestPattern("/test", PARAMETERS, REQUEST_HEADERS);
+        final RequestPattern pattern = new RequestPattern("/test", PARAMETERS, PATTERN_REQUEST_HEADERS);
         final Response response = new Response(200, RESULT, null, MediaType.JSON_UTF_8);
         putResponse(pattern, response);
     }

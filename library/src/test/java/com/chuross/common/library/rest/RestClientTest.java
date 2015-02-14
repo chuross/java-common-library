@@ -2,6 +2,7 @@ package com.chuross.common.library.rest;
 
 import com.chuross.common.library.http.DefaultHttpClient;
 import com.chuross.common.library.http.DefaultResponse;
+import com.chuross.common.library.http.HeaderElement;
 import com.chuross.common.library.http.HttpClient;
 import com.chuross.testcase.http.HttpRequestTestCase;
 import com.chuross.testcase.http.RequestPattern;
@@ -45,7 +46,7 @@ public class RestClientTest extends HttpRequestTestCase {
         assertThat(result.getContent(), is("hoge"));
     }
 
-    private class TestRestClient extends RestClient<DefaultResponse> {
+    private class TestRestClient extends RestClient {
 
         public TestRestClient(final HttpClient<DefaultResponse> client) {
             super(client);
@@ -53,9 +54,9 @@ public class RestClientTest extends HttpRequestTestCase {
 
         public Observable<Result<String>> executeTest() {
             final RestRequest request = new RestRequestBuilder(BASE_URL + "/test").addParameter("hoge", "fuga").addParameter("wawa", "abibi").addRequestHeader("testHeader", "ababa").build();
-            return execute(Method.GET, request, new Func1<DefaultResponse, Result<String>>() {
+            return execute(Method.GET, request, new Func1<com.chuross.common.library.http.Response, Result<String>>() {
                 @Override
-                public Result<String> call(final DefaultResponse response) {
+                public Result<String> call(final com.chuross.common.library.http.Response response) {
                     return new Result<String>() {
                         @Override
                         public int getStatus() {
@@ -68,7 +69,7 @@ public class RestClientTest extends HttpRequestTestCase {
                         }
 
                         @Override
-                        public ListMultimap<String, Object> getHeaders() {
+                        public ListMultimap<String, HeaderElement> getHeaders() {
                             return null;
                         }
 

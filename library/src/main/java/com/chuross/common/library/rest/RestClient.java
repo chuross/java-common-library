@@ -5,15 +5,15 @@ import com.chuross.common.library.http.Response;
 import rx.Observable;
 import rx.functions.Func1;
 
-public abstract class RestClient<RESPONSE extends Response> {
+public abstract class RestClient {
 
-    private HttpClient<RESPONSE> client;
+    private HttpClient<?> client;
 
-    public RestClient(final HttpClient<RESPONSE> client) {
+    public RestClient(final HttpClient<?> client) {
         this.client = client;
     }
 
-    protected <RESULT extends Result<?>> Observable<RESULT> execute(final Method method, final RestRequest request, final Func1<RESPONSE, RESULT> convertFunc) {
+    protected <RESULT extends Result<?>> Observable<RESULT> execute(final Method method, final RestRequest request, final Func1<Response, RESULT> convertFunc) {
         switch(method) {
             case GET:
                 return executeGet(request, convertFunc);
@@ -28,19 +28,19 @@ public abstract class RestClient<RESPONSE extends Response> {
         }
     }
 
-    private <RESULT extends Result<?>> Observable<RESULT> executeGet(final RestRequest request, final Func1<RESPONSE, RESULT> convertFunc) {
+    private <RESULT extends Result<?>> Observable<RESULT> executeGet(final RestRequest request, final Func1<Response, RESULT> convertFunc) {
         return client.get(request.getUrl(), request.getParameters(), request.getRequestHeaders()).map(convertFunc);
     }
 
-    private <RESULT extends Result<?>> Observable<RESULT> executePost(final RestRequest request, final Func1<RESPONSE, RESULT> convertFunc) {
+    private <RESULT extends Result<?>> Observable<RESULT> executePost(final RestRequest request, final Func1<Response, RESULT> convertFunc) {
         return client.post(request.getUrl(), request.getParameters(), request.getRequestHeaders()).map(convertFunc);
     }
 
-    private <RESULT extends Result<?>> Observable<RESULT> executePut(final RestRequest request, final Func1<RESPONSE, RESULT> convertFunc) {
+    private <RESULT extends Result<?>> Observable<RESULT> executePut(final RestRequest request, final Func1<Response, RESULT> convertFunc) {
         return client.put(request.getUrl(), request.getParameters(), request.getRequestHeaders()).map(convertFunc);
     }
 
-    private <RESULT extends Result<?>> Observable<RESULT> executeDelete(final RestRequest request, final Func1<RESPONSE, RESULT> convertFunc) {
+    private <RESULT extends Result<?>> Observable<RESULT> executeDelete(final RestRequest request, final Func1<Response, RESULT> convertFunc) {
         return client.delete(request.getUrl(), request.getParameters(), request.getRequestHeaders()).map(convertFunc);
     }
 }

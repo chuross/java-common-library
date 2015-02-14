@@ -1,5 +1,6 @@
 package com.chuross.common.library.rest;
 
+import com.chuross.common.library.http.HeaderElement;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.net.HttpHeaders;
@@ -8,7 +9,7 @@ public class RestRequestBuilder {
 
     private String url;
     private ListMultimap<String, Object> parameters = ArrayListMultimap.create();
-    private ListMultimap<String, Object> requestHeaders = ArrayListMultimap.create();
+    private ListMultimap<String, HeaderElement> requestHeaders = ArrayListMultimap.create();
 
     public RestRequestBuilder(final String url) {
         this.url = url;
@@ -18,7 +19,7 @@ public class RestRequestBuilder {
         if(requestHeaders.containsKey(HttpHeaders.USER_AGENT)) {
             requestHeaders.removeAll(HttpHeaders.USER_AGENT);
         }
-        requestHeaders.put(HttpHeaders.USER_AGENT, value);
+        requestHeaders.put(HttpHeaders.USER_AGENT, HeaderElement.of(value));
         return this;
     }
 
@@ -34,8 +35,13 @@ public class RestRequestBuilder {
         return this;
     }
 
+    public RestRequestBuilder addRequestHeader(final String key, final HeaderElement element) {
+        requestHeaders.put(key, element);
+        return this;
+    }
+
     public RestRequestBuilder addRequestHeader(final String key, final Object value) {
-        requestHeaders.put(key, value);
+        requestHeaders.put(key, HeaderElement.of(value.toString()));
         return this;
     }
 

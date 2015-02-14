@@ -1,5 +1,6 @@
 package com.chuross.common.library.rest;
 
+import com.chuross.common.library.http.HeaderElement;
 import com.google.common.collect.ListMultimap;
 
 import java.net.HttpURLConnection;
@@ -7,10 +8,10 @@ import java.net.HttpURLConnection;
 public abstract class AbstractResult<T> implements Result<T> {
 
     private int status;
-    private ListMultimap<String, Object> responseHeaders;
+    private ListMultimap<String, HeaderElement> responseHeaders;
     private T content;
 
-    public AbstractResult(final int status, final ListMultimap<String, Object> responseHeaders, final T content) {
+    public AbstractResult(final int status, final ListMultimap<String, HeaderElement> responseHeaders, final T content) {
         this.status = status;
         this.responseHeaders = responseHeaders;
         this.content = content;
@@ -27,7 +28,7 @@ public abstract class AbstractResult<T> implements Result<T> {
     }
 
     @Override
-    public ListMultimap<String, Object> getHeaders() {
+    public ListMultimap<String, HeaderElement> getHeaders() {
         return responseHeaders;
     }
 

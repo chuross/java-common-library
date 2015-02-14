@@ -6,7 +6,7 @@ public interface Response {
 
     public int getStatus();
 
-    public ListMultimap<String, Object> getHeaders();
+    public ListMultimap<String, HeaderElement> getHeaders();
 
     public byte[] getData();
 }

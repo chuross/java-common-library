@@ -5,17 +5,17 @@ import com.google.common.collect.ListMultimap;
 public class DefaultResponse implements Response {
 
     private int status;
-    private ListMultimap<String, Object> headers;
+    private ListMultimap<String, HeaderElement> headers;
     private byte[] data;
     private Exception exception;
 
-    public DefaultResponse(final int status, final ListMultimap<String, Object> headers, final byte[] data) {
+    public DefaultResponse(final int status, final ListMultimap<String, HeaderElement> headers, final byte[] data) {
         this.status = status;
         this.headers = headers;
         this.data = data;
     }
 
-    public DefaultResponse(final int status, final ListMultimap<String, Object> headers, final Exception exception) {
+    public DefaultResponse(final int status, final ListMultimap<String, HeaderElement> headers, final Exception exception) {
         this.status = status;
         this.headers = headers;
         this.exception = exception;
@@ -27,7 +27,7 @@ public class DefaultResponse implements Response {
     }
 
     @Override
-    public ListMultimap<String, Object> getHeaders() {
+    public ListMultimap<String, HeaderElement> getHeaders() {
         return headers;
     }
 

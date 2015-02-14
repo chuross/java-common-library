@@ -22,35 +22,35 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
     private DefaultRequestConfig config;
 
     @Override
-    public Observable<DefaultResponse> get(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> get(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, HeaderElement> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(false, "GET", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public Observable<DefaultResponse> post(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> post(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, HeaderElement> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(true, "POST", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public Observable<DefaultResponse> post(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> post(final String url, final String requestBody, final ListMultimap<String, HeaderElement> requestHeaders) {
         return execute(true, "POST", url, requestBody, requestHeaders, getConfig());
     }
 
     @Override
-    public Observable<DefaultResponse> put(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> put(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, HeaderElement> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(true, "PUT", url, parameter, requestHeaders, getConfig());
     }
 
     @Override
-    public Observable<DefaultResponse> put(final String url, final String requestBody, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> put(final String url, final String requestBody, final ListMultimap<String, HeaderElement> requestHeaders) {
         return execute(true, "PUT", url, requestBody, requestHeaders, getConfig());
     }
 
     @Override
-    public Observable<DefaultResponse> delete(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    public Observable<DefaultResponse> delete(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, HeaderElement> requestHeaders) {
         final String parameter = HttpClientUtils.toQueryString(parameters);
         return execute(false, "DELETE", url, parameter, requestHeaders, getConfig());
     }
@@ -59,7 +59,7 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         return config != null ? config : new DefaultRequestConfig();
     }
 
-    private static Observable<DefaultResponse> execute(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    private static Observable<DefaultResponse> execute(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, HeaderElement> requestHeaders, final DefaultRequestConfig config) {
         final String targetUrl = getTargetUrl(doInput, url, parameter);
         final HttpURLConnection connection = openConnection(doInput, method, targetUrl, parameter, requestHeaders, config);
         return Observable.create(new Observable.OnSubscribe<DefaultResponse>() {
@@ -102,13 +102,13 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         return connection.getResponseCode();
     }
 
-    private static ListMultimap<String, Object> getResponseHeaders(final HttpURLConnection connection) {
-        final ListMultimap<String, Object> multiMap = ArrayListMultimap.create();
+    private static ListMultimap<String, HeaderElement> getResponseHeaders(final HttpURLConnection connection) {
+        final ListMultimap<String, HeaderElement> multiMap = ArrayListMultimap.create();
         CollectionUtils.foreach(connection.getHeaderFields(), new Procedure<String, List<String>>() {
             @Override
             public void process(final String key, final List<String> values) {
                 for(final String value : values) {
-                    multiMap.put(key, value);
+                    multiMap.put(key, HeaderElement.of(value));
                 }
             }
         });
@@ -122,7 +122,7 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         return StringUtils.isBlank(parameter) ? url : url + "?" + parameter;
     }
 
-    private static HttpURLConnection openConnection(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) {
+    private static HttpURLConnection openConnection(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, HeaderElement> requestHeaders, final DefaultRequestConfig config) {
         return MethodCallUtils.callOrNull(new Callable<HttpURLConnection>() {
             @Override
             public HttpURLConnection call() throws Exception {
@@ -131,7 +131,7 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         });
     }
 
-    private static HttpURLConnection openConnectionInCallable(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, Object> requestHeaders, final DefaultRequestConfig config) throws Exception {
+    private static HttpURLConnection openConnectionInCallable(final boolean doInput, final String method, final String url, final String parameter, final ListMultimap<String, HeaderElement> requestHeaders, final DefaultRequestConfig config) throws Exception {
         final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod(method);
         connection.setConnectTimeout(config.getConnectionTimeout());
@@ -144,10 +144,10 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         return connection;
     }
 
-    private static void setRequestParameters(final HttpURLConnection connection, final ListMultimap<String, Object> requestParameters) {
-        CollectionUtils.foreach(requestParameters, new Procedure<String, Object>() {
+    private static void setRequestParameters(final HttpURLConnection connection, final ListMultimap<String, HeaderElement> requestParameters) {
+        CollectionUtils.foreach(requestParameters, new Procedure<String, HeaderElement>() {
             @Override
-            public void process(final String key, final Object value) {
+            public void process(final String key, final HeaderElement value) {
                 connection.addRequestProperty(key, value.toString());
             }
         });

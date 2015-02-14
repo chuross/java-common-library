@@ -1,14 +1,15 @@
 package com.chuross.common.library.rest;
 
+import com.chuross.common.library.http.HeaderElement;
 import com.google.common.collect.ListMultimap;
 
 public class RestRequest {
 
     private String url;
     private ListMultimap<String, Object> parameters;
-    private ListMultimap<String, Object> requestHeaders;
+    private ListMultimap<String, HeaderElement> requestHeaders;
 
-    RestRequest(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, Object> requestHeaders) {
+    RestRequest(final String url, final ListMultimap<String, Object> parameters, final ListMultimap<String, HeaderElement> requestHeaders) {
         this.url = url;
         this.parameters = parameters;
         this.requestHeaders = requestHeaders;
@@ -22,7 +23,7 @@ public class RestRequest {
         return parameters;
     }
 
-    public ListMultimap<String, Object> getRequestHeaders() {
+    public ListMultimap<String, HeaderElement> getRequestHeaders() {
         return requestHeaders;
     }
 }
