@@ -23,6 +23,15 @@ public class RestRequestBuilder {
         return this;
     }
 
+    public RestRequestBuilder addCookie(final Object value) {
+        return addCookie(HeaderElement.of(value.toString()));
+    }
+
+    public RestRequestBuilder addCookie(final HeaderElement element) {
+        requestHeaders.put(HttpHeaders.COOKIE, element);
+        return this;
+    }
+
     public RestRequestBuilder addParameter(final String key, final Object value) {
         parameters.put(key, value);
         return this;
