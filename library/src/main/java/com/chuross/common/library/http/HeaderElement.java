@@ -18,6 +18,14 @@ public class HeaderElement implements Serializable {
         this.value = value;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return StringUtils.isBlank(name) ? value : name + "=" + value;
