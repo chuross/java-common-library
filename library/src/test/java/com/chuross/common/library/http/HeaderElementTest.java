@@ -12,5 +12,6 @@ public class HeaderElementTest {
         assertThat(HeaderElement.of("hoge=fuga").toString(), is("hoge=fuga"));
         assertThat(HeaderElement.of("hoge").toString(), is("hoge"));
         assertThat(HeaderElement.of("hoge = fuga").toString(), is("hoge=fuga"));
+        assertThat(HeaderElement.of("hoge=fuga;").toString(), is("hoge=fuga"));
     }
 }

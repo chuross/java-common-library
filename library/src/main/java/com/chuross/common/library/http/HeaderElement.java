@@ -40,6 +40,6 @@ public class HeaderElement implements Serializable {
     }
 
     private static String normalize(final String value) {
-        return value.endsWith(";") ? value.substring(0, value.length()) : value;
+        return value.endsWith(";") ? value.substring(0, value.length() - 1) : value;
     }
 }
