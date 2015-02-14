@@ -136,7 +136,7 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
         connection.setRequestMethod(method);
         connection.setConnectTimeout(config.getConnectionTimeout());
         connection.setReadTimeout(config.getReadTimeout());
-        connection.setAllowUserInteraction(config.isAllowRedirect());
+        connection.setInstanceFollowRedirects(config.isAllowRedirect());
         setRequestParameters(connection, requestHeaders);
         if(doInput) {
             setParameter(connection, parameter);
