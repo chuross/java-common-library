@@ -4,9 +4,9 @@ import com.google.common.collect.ListMultimap;
 
 public interface Response {
 
-    public int getStatus();
+    int getStatus();
 
-    public ListMultimap<String, HeaderElement> getHeaders();
+    ListMultimap<String, HeaderElement> getHeaders();
 
-    public byte[] getData();
+    byte[] getData();
 }

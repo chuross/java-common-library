@@ -5,11 +5,11 @@ import com.google.common.collect.ListMultimap;
 
 public interface Result<T> {
 
-    public int getStatus();
+    int getStatus();
 
-    public boolean isSuccess();
+    boolean isSuccess();
 
-    public ListMultimap<String, HeaderElement> getHeaders();
+    ListMultimap<String, HeaderElement> getHeaders();
 
-    public T getContent();
+    T getContent();
 }

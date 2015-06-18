@@ -4,5 +4,5 @@ import java.io.Serializable;
 
 public interface Identity<T> extends Serializable, ValueObject {
 
-    public T getValue();
+    T getValue();
 }
