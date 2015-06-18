@@ -18,6 +18,11 @@ public abstract class AbstractEntity<I extends Identity<?>, T extends Entity<I, 
     }
 
     @Override
+    public boolean sameIdentityAs(final I identity) {
+        return this.identity.equals(identity);
+    }
+
+    @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }

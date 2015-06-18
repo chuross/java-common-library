@@ -4,11 +4,13 @@ import java.io.Serializable;
 
 public interface Entity<I extends Identity<?>, T extends Entity<I, T>> extends Cloneable, Serializable {
 
-    public I getIdentity();
+    I getIdentity();
 
-    public boolean equals(Object that);
+    boolean sameIdentityAs(I identity);
 
-    public int hashCode();
+    boolean equals(Object that);
 
-    public T clone();
+    int hashCode();
+
+    T clone();
 }
