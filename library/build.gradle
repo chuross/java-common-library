@@ -34,8 +34,8 @@ artifacts {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository url: TARGET_REPOSITORY_PATH
-            pom.version = '0.1.0'
+            repository url: System.getenv('LOCAL_MAVEN_REPOSITORY_URL')
+            pom.version = '0.1.1'
             pom.groupId = 'com.chuross'
             pom.artifactId = 'common-library'
         }
