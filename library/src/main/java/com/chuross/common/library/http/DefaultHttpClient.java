@@ -3,6 +3,7 @@ package com.chuross.common.library.http;
 import com.chuross.common.library.util.*;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import rx.Observable;
@@ -146,12 +147,20 @@ public class DefaultHttpClient implements HttpClient<DefaultResponse> {
     }
 
     private static void setRequestParameters(final HttpURLConnection connection, final ListMultimap<String, HeaderElement> requestParameters) {
+        if(requestParameters.containsKey(HttpHeaders.COOKIE)) {
+            setCookie(connection, requestParameters.get(HttpHeaders.COOKIE));
+            requestParameters.removeAll(HttpHeaders.COOKIE);
+        }
         CollectionUtils.foreach(requestParameters, new Procedure<String, HeaderElement>() {
             @Override
             public void process(final String key, final HeaderElement value) {
                 connection.addRequestProperty(key, value.toString());
             }
         });
+    }
+
+    private static void setCookie(final HttpURLConnection connection, final List<HeaderElement> headerElements) {
+        connection.setRequestProperty(HttpHeaders.COOKIE, HeaderElement.mergeToString(headerElements));
     }
 
     private static void setParameter(final HttpURLConnection connection, final String parameter) throws IOException {

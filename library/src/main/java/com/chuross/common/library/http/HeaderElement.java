@@ -1,8 +1,10 @@
 package com.chuross.common.library.http;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class HeaderElement implements Serializable {
 
@@ -41,5 +43,13 @@ public class HeaderElement implements Serializable {
 
     private static String normalize(final String value) {
         return value.endsWith(";") ? value.substring(0, value.length() - 1) : value;
+    }
+
+    public static String mergeToString(List<HeaderElement> elements) {
+        return Joiner.on(";").join(elements);
+    }
+
+    public static String mergeToString(HeaderElement... elements) {
+        return Joiner.on(";").join(elements);
     }
 }
