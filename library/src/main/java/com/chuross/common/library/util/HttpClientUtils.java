@@ -24,6 +24,6 @@ public final class HttpClientUtils {
                 builder.append(urlEscape.escape(value.toString()));
             }
         });
-        return builder.toString();
+        return builder.toString().substring(1);
     }
 }
