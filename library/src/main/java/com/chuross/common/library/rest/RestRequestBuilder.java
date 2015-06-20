@@ -1,15 +1,15 @@
 package com.chuross.common.library.rest;
 
 import com.chuross.common.library.http.HeaderElement;
-import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.net.HttpHeaders;
 
 public class RestRequestBuilder {
 
     private String url;
-    private ListMultimap<String, Object> parameters = ArrayListMultimap.create();
-    private ListMultimap<String, HeaderElement> requestHeaders = ArrayListMultimap.create();
+    private ListMultimap<String, Object> parameters = LinkedListMultimap.create();
+    private ListMultimap<String, HeaderElement> requestHeaders = LinkedListMultimap.create();
 
     public RestRequestBuilder(final String url) {
         this.url = url;
