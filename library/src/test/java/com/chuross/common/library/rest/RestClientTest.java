@@ -4,46 +4,48 @@ import com.chuross.common.library.http.DefaultHttpClient;
 import com.chuross.common.library.http.DefaultResponse;
 import com.chuross.common.library.http.HeaderElement;
 import com.chuross.common.library.http.HttpClient;
-import com.chuross.testcase.http.HttpRequestTestCase;
-import com.chuross.testcase.http.RequestPattern;
-import com.chuross.testcase.http.Response;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.net.MediaType;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import rx.Observable;
 import rx.functions.Func1;
 
+import java.net.InetAddress;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class RestClientTest extends HttpRequestTestCase {
+public class RestClientTest {
 
-    private static final String RESULT = "hoge";
-    private static final ListMultimap<String, Object> PARAMETERS = ArrayListMultimap.create();
-    private static final ListMultimap<String, Object> REQUEST_HEADERS = ArrayListMultimap.create();
+    private MockWebServer server;
     private TestRestClient client;
 
-    static {
-        PARAMETERS.put("hoge", "fuga");
-        PARAMETERS.put("wawa", "abibi");
-        REQUEST_HEADERS.put("testHeader", "ababa");
+    @Before
+    public void before() throws Exception {
+        server = new MockWebServer();
+        server.start(InetAddress.getByName("localhost"), 3000);
+        client = new TestRestClient(new DefaultHttpClient());
     }
 
-    @Before
-    public void before() {
-        client = new TestRestClient(new DefaultHttpClient());
-        final RequestPattern pattern = new RequestPattern("/test", PARAMETERS, REQUEST_HEADERS);
-        final Response response = new Response(200, RESULT, null, MediaType.JSON_UTF_8);
-        putResponse(pattern, response);
+    @After
+    public void after() throws Exception {
+        server.shutdown();
     }
 
     @Test
     public void リクエストができる() throws Exception {
-        final Result<String> result = client.executeTest().toBlocking().single();
+        server.enqueue(new MockResponse().setResponseCode(200).setBody("hogeBody"));
+        final Result<String> result = client.executeTest(new RestRequestBuilder(server.getUrl("/test").toString()).addParameter("hoge", "fuga").addParameter("wawa", "abibi").addRequestHeader("testHeader", "ababa").build()).toBlocking().single();
         assertThat(result.getStatus(), is(200));
-        assertThat(result.getContent(), is("hoge"));
+        assertThat(result.getContent(), is("hogeBody"));
+        final RecordedRequest request = server.takeRequest();
+        assertThat(request.getMethod(), is("GET"));
+        assertThat(request.getPath(), is("/test?hoge=fuga&wawa=abibi"));
+        assertThat(request.getHeader("testHeader"), is("ababa"));
     }
 
     private class TestRestClient extends RestClient {
@@ -52,8 +54,7 @@ public class RestClientTest extends HttpRequestTestCase {
             super(client);
         }
 
-        public Observable<Result<String>> executeTest() {
-            final RestRequest request = new RestRequestBuilder(BASE_URL + "/test").addParameter("hoge", "fuga").addParameter("wawa", "abibi").addRequestHeader("testHeader", "ababa").build();
+        public Observable<Result<String>> executeTest(final RestRequest request) {
             return execute(Method.GET, request, new Func1<com.chuross.common.library.http.Response, Result<String>>() {
                 @Override
                 public Result<String> call(final com.chuross.common.library.http.Response response) {

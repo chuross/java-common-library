@@ -1,24 +1,27 @@
 package com.chuross.common.library.http;
 
-import com.chuross.testcase.http.HttpRequestTestCase;
-import com.chuross.testcase.http.RequestPattern;
-import com.chuross.testcase.http.Response;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.net.MediaType;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.net.InetAddress;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DefaultHttpClientTest extends HttpRequestTestCase {
+public class DefaultHttpClientTest {
 
-    private static final String RESULT = "{\"hoge\": \"fuga\"}";
     private static final ListMultimap<String, Object> PARAMETERS = ArrayListMultimap.create();
     private static final ListMultimap<String, HeaderElement> REQUEST_HEADERS = ArrayListMultimap.create();
     private static final ListMultimap<String, Object> PATTERN_REQUEST_HEADERS = ArrayListMultimap.create();
     private DefaultHttpClient client;
+    private MockWebServer server;
+    private String url;
 
     static {
         PARAMETERS.put("hoge", "fuga");
@@ -28,38 +31,54 @@ public class DefaultHttpClientTest extends HttpRequestTestCase {
     }
 
     @Before
-    public void before() {
+    public void before() throws Exception {
+        server = new MockWebServer();
+        server.start(InetAddress.getByName("localhost"), 3000);
+        server.enqueue(new MockResponse().setResponseCode(200));
+        url = server.getUrl("/test").toString();
         client = new DefaultHttpClient();
-        final RequestPattern pattern = new RequestPattern("/test", PARAMETERS, PATTERN_REQUEST_HEADERS);
-        final Response response = new Response(200, RESULT, null, MediaType.JSON_UTF_8);
-        putResponse(pattern, response);
+    }
+
+    @After
+    public void after() throws Exception {
+        server.shutdown();
     }
 
     @Test
     public void getでリクエストができる() throws Exception {
-        final DefaultResponse result = client.get(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
-        assertThat(result.getStatus(), is(200));
-        assertThat(new String(result.getData()), is(RESULT));
+        client.get(url, PARAMETERS, REQUEST_HEADERS).toBlocking().single();
+        final RecordedRequest request = server.takeRequest();
+        assertThat(request.getMethod(), is("GET"));
+        assertThat(request.getPath(), is("/test?hoge=fuga&wawa=abibi"));
+        assertThat(request.getHeaders().get("testHeader"), is("ababa"));
     }
 
     @Test
     public void postでリクエストができる() throws Exception {
-        final DefaultResponse result = client.post(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
-        assertThat(result.getStatus(), is(200));
-        assertThat(new String(result.getData()), is(RESULT));
+        client.post(url, PARAMETERS, REQUEST_HEADERS).toBlocking().single();
+        final RecordedRequest request = server.takeRequest();
+        assertThat(request.getMethod(), is("POST"));
+        assertThat(request.getPath(), is("/test"));
+        assertThat(request.getBody().readUtf8(), is("hoge=fuga&wawa=abibi"));
+        assertThat(request.getHeaders().get("testHeader"), is("ababa"));
     }
 
     @Test
     public void putでリクエストができる() throws Exception {
-        final DefaultResponse result = client.put(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
-        assertThat(result.getStatus(), is(200));
-        assertThat(new String(result.getData()), is(RESULT));
+        client.put(url, PARAMETERS, REQUEST_HEADERS).toBlocking().single();
+        final RecordedRequest request = server.takeRequest();
+        assertThat(request.getMethod(), is("PUT"));
+        assertThat(request.getPath(), is("/test"));
+        assertThat(request.getBody().readUtf8(), is("hoge=fuga&wawa=abibi"));
+        assertThat(request.getHeaders().get("testHeader"), is("ababa"));
     }
 
     @Test
     public void deleteでリクエストができる() throws Exception {
-        final DefaultResponse result = client.delete(getUrl("/test"), PARAMETERS, REQUEST_HEADERS).toBlocking().single();
-        assertThat(result.getStatus(), is(200));
-        assertThat(new String(result.getData()), is(RESULT));
+        client.delete(url, PARAMETERS, REQUEST_HEADERS).toBlocking().single();
+        final RecordedRequest request = server.takeRequest();
+        assertThat(request.getMethod(), is("DELETE"));
+        assertThat(request.getPath(), is("/test?hoge=fuga&wawa=abibi"));
+        assertThat(request.getHeaders().get("testHeader"), is("ababa"));
     }
 }
