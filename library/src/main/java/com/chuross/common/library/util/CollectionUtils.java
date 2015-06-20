@@ -26,6 +26,13 @@ public final class CollectionUtils {
         map.put(key, item);
     }
 
+    public static <K, T> void putIfNotNull(final ListMultimap<K, T> map, final K key, final T item) {
+        if(key == null || item == null) {
+            return;
+        }
+        map.put(key, item);
+    }
+
     public static <K, V> void foreach(final Map<K, V> map, final Procedure<K, V> procedure) {
         for(final Map.Entry<K, V> entry : map.entrySet()) {
             procedure.process(entry.getKey(), entry.getValue());
