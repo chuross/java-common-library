@@ -29,7 +29,7 @@ public final class MethodCallUtils {
         }
     }
 
-    public static <T> T callOrSubstitute(final Callable<T> callable, final T defaultValue) {
+    public static <T> T callOrDefault(final Callable<T> callable, final T defaultValue) {
         try {
             return callable.call();
         } catch(final Throwable tr) {
@@ -38,7 +38,7 @@ public final class MethodCallUtils {
         }
     }
 
-    public static <T> T callOrSubstitute(final Callable<T> callable, final Callable<T> failCallable) {
+    public static <T> T callOrDefault(final Callable<T> callable, final Callable<T> failCallable) {
         try {
             return callable.call();
         } catch(final Throwable tr) {
