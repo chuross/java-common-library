@@ -49,6 +49,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.reactivex:rxjava:1.0.12'
     compile 'net.arnx:jsonic:1.3.5'
     compile 'org.simpleframework:simple-xml:2.7.1'

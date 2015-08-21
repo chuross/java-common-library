@@ -1,6 +1,7 @@
-package com.chuross.common.library.rest;
+package com.chuross.common.library.http.rest;
 
 import com.chuross.common.library.http.HttpClient;
+import com.chuross.common.library.http.Method;
 import com.chuross.common.library.http.Response;
 import rx.Observable;
 import rx.functions.Func1;

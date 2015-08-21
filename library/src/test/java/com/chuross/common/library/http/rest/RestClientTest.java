@@ -1,9 +1,6 @@
-package com.chuross.common.library.rest;
+package com.chuross.common.library.http.rest;
 
-import com.chuross.common.library.http.DefaultHttpClient;
-import com.chuross.common.library.http.DefaultResponse;
-import com.chuross.common.library.http.HeaderElement;
-import com.chuross.common.library.http.HttpClient;
+import com.chuross.common.library.http.*;
 import com.google.common.collect.ListMultimap;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
