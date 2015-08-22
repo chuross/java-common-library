@@ -35,7 +35,7 @@ uploadArchives {
     repositories {
         mavenDeployer {
             repository url: System.getenv('LOCAL_MAVEN_REPOSITORY_URL')
-            pom.version = '1.0.0'
+            pom.version = '1.0.1'
             pom.groupId = 'com.github.chuross'
             pom.artifactId = 'common-library'
         }
